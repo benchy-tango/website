@@ -105,6 +105,7 @@ Círculo verde fijo abajo a la derecha en **todas las páginas** (petición del 
 
 - Formulario `name="contact"`, `data-netlify="true"`, honeypot `bot-field`, campo oculto `form-name`. Ambos idiomas envían al mismo formulario; campo oculto `language` dice desde qué página llegó.
 - Campos: name*, email*, enquiry (select: `classes`, `workshop`, `dj`, `performance`, `art`, `other` — **valores en inglés**, etiquetas traducidas), details (lugar/fecha del evento, opcional — lo pide el brief §4), message*.
+- `novalidate` lo añade el script (no está en el HTML): sin JS el navegador valida los campos obligatorios.
 - Con JS: validación propia, envío por `fetch` a `/`, **mensaje de éxito solo si Netlify responde OK**; si falla, error con el email. Sin JS: POST normal y página de confirmación de Netlify.
 - `?enquiry=<tipo>` en la URL preselecciona el tipo.
 - **Pendiente en Netlify** (no está en el código): *Site configuration → Notifications → Emails and webhooks → Form submission notifications* → email donde llegan las consultas. Solo funciona con la web publicada en Netlify (en local da error, es normal).
@@ -178,6 +179,7 @@ Este proyecto aplica los skills **Impeccable** (contexto: `.claude/skills/impecc
 
 ## 11. Registro de cambios
 
+- **2026-10-11** — Formulario revisado (HTML para Netlify, envío, errores, sin JS). `novalidate` lo pone ahora el script: sin JavaScript el navegador exige los campos obligatorios. En Netlify hay que activar *Forms → Enable form detection* antes del primer despliegue.
 - **2026-10-11** — Botón flotante de WhatsApp en todas las páginas. Corregido el reveal de fotos: el telón `clip-path` estaba en el contenedor observado y las fotos de clases, DJ y About no llegaban a mostrarse con movimiento activado.
 - **2026-10-11** — Galería con las 8 pinturas reales de `imagenes/arte` (sustituyen a los marcos de ejemplo); la tarjeta usa la proporción real de cada obra.
 - **2026-10-11** — Primera versión: 5 páginas en EN y ES, header/footer, formulario Netlify, galería con marcos de ejemplo, tokens de marca, movimiento con reducción de movimiento, revisión final de Impeccable y DESIGN.md.
