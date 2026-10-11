@@ -1,0 +1,120 @@
+---
+/**
+ * Page shell shared by every page: <head> (title, description, canonical,
+ * hreflang, Open Graph, structured data, fonts), header, footer, and the
+ * small reveal-on-scroll script.
+ */
+import { Font, getImage } from 'astro:assets';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { CONTACT, activeSocialAccounts } from '../data/contact';
+import { DEFAULT_LANGUAGE, LANGUAGES, LANGUAGE_DETAILS, getTranslation, pageUrl, type Language, type PageName } from '../i18n/languages';
+import shareImageSource from '../assets/photos/aaron-dancing.jpg';
+
+interface Props {
+  language: Language;
+  page: PageName;
+  /** Page title; the site name is added after it (the homepage puts it first). */
+  title: string;
+  description: string;
+  /** Transparent header over a full-bleed opening image. */
+  headerOverlay?: boolean;
+  noindex?: boolean;
+}
+
+const { language, page, title, description, headerOverlay = false, noindex = false } = Astro.props;
+const t = getTranslation(language);
+const fullTitle = page === 'home' ? `${t.meta.siteName} | ${title}` : `${title} | ${t.meta.siteName}`;
+
+// Absolute URLs need the production domain (`site` in astro.config.mjs).
+const site = Astro.site;
+const absolute = (path: string) => (site ? new URL(path, site).href : undefined);
+const canonicalUrl = absolute(pageUrl(language, page));
+
+const shareImage = await getImage({ src: shareImageSource, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const shareImageUrl = absolute(shareImage.src);
+
+// Structured data: only confirmed facts (name, role, contact, official accounts).
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Aaron Benchimol',
+  jobTitle: t.meta.descriptor,
+  email: `mailto:${CONTACT.email}`,
+  ...(site ? { url: absolute(pageUrl(language, 'home')) } : {}),
+  sameAs: activeSocialAccounts().map((account) => account.url),
+};
+---
+
+<!doctype html>
+<html lang={LANGUAGE_DETAILS[language].htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0b0b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {canonicalUrl && !noindex && <link rel="canonical" href={canonicalUrl} />}
+    {
+      site &&
+        !noindex &&
+        LANGUAGES.map((code) => <link rel="alternate" hreflang={LANGUAGE_DETAILS[code].htmlLang} href={absolute(pageUrl(code, page))} />)
+    }
+    {site && !noindex && <link rel="alternate" hreflang="x-default" href={absolute(pageUrl(DEFAULT_LANGUAGE, page))} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t.meta.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={LANGUAGE_DETAILS[language].ogLocale} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+    {shareImageUrl && <meta property="og:image:width" content="1200" />}
+    {shareImageUrl && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-playfair" preload />
+    <Font cssVariable="--font-montserrat" preload />
+
+    <!-- Marks JS as available: reveal animations only start hidden when they can finish. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{t.navigation.skipToContent}</a>
+    <SiteHeader language={language} page={page} overlay={headerOverlay} />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter language={language} page={page} />
+    <WhatsAppButton language={language} />
+
+    <script>
+      // Reveal marked elements once as they enter the viewport. Content is
+      // visible by default (see global.css); with reduced motion nothing hides.
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal], [data-reveal-image]');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        targets.forEach((element) => element.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        targets.forEach((element) => observer.observe(element));
+      }
+    </script>
+  </body>
+</html>

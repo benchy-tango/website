@@ -1,0 +1,50 @@
+---
+/**
+ * Small inline SVG icons, one consistent 1.5px stroke (no icon package).
+ * Decorative by default: pass `label` only when the icon stands alone.
+ */
+interface Props {
+  name: 'arrow' | 'menu' | 'close' | 'instagram' | 'facebook' | 'whatsapp' | 'mail' | 'pin';
+  label?: string;
+  class?: string;
+}
+
+const { name, label, class: className } = Astro.props;
+
+const PATHS: Record<Props['name'], string> = {
+  arrow: 'M4 12h15M13 6l6 6-6 6',
+  menu: 'M3 8h18M3 16h18',
+  close: 'M6 6l12 12M18 6L6 18',
+  instagram:
+    'M7.5 3h9A4.5 4.5 0 0 1 21 7.5v9a4.5 4.5 0 0 1-4.5 4.5h-9A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3ZM12 8.25a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5ZM17.25 6.4v.1',
+  facebook: 'M14.5 21v-7.25h2.6l.4-3.1h-3V8.7c0-.9.25-1.5 1.55-1.5h1.6V4.45A21 21 0 0 0 15.3 4.3c-2.3 0-3.85 1.4-3.85 3.95v2.4H8.85v3.1h2.6V21',
+  whatsapp:
+    'M3.6 20.4l1.2-4.3A8.4 8.4 0 1 1 8 19.3l-4.4 1.1ZM9 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.1.1-.2.3 0 .5a6.3 6.3 0 0 0 3 2.6c.2.1.4 0 .5-.1l.6-.8c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.2.4.4 0 .5-.1 1.1-.6 1.5-.5.4-1.4.7-2.4.4a9 9 0 0 1-5.3-4.7c-.6-1.3-.4-2.6.2-3.3Z',
+  mail: 'M3.75 6h16.5v12H3.75V6ZM4 6.5l8 6 8-6',
+  pin: 'M12 21s-6.75-6.2-6.75-11.25a6.75 6.75 0 0 1 13.5 0C18.75 14.8 12 21 12 21ZM12 12.25a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+};
+---
+
+<svg
+  class:list={['icon', className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+>
+  <path d={PATHS[name]}></path>
+</svg>
+
+<style>
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+  }
+</style>

@@ -1,0 +1,197 @@
+---
+/**
+ * Footer: name and descriptor, main pages, contact, active social accounts,
+ * language switch and the web agency credit.
+ */
+import Icon from './Icon.astro';
+import { CONTACT, activeSocialAccounts, whatsappUrl } from '../data/contact';
+import { LANGUAGES, LANGUAGE_DETAILS, getTranslation, pageUrl, type Language, type PageName } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+  page: PageName;
+}
+
+const { language, page } = Astro.props;
+const t = getTranslation(language);
+const year = new Date().getFullYear();
+
+const links: { page: PageName; label: string }[] = [
+  { page: 'home', label: t.navigation.home },
+  { page: 'danceMusic', label: t.navigation.danceMusic },
+  { page: 'art', label: t.navigation.art },
+  { page: 'about', label: t.navigation.about },
+  { page: 'contact', label: t.navigation.contact },
+];
+const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.common.instagramArt, facebook: 'Facebook' };
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">Aaron Benchimol</p>
+      <p class="site-footer__descriptor">
+        {
+          t.meta.descriptor.split(' · ').map((part, index) => (
+            <>
+              {index > 0 && ' · '}
+              <span class="site-footer__descriptor-part">{part}</span>
+            </>
+          ))
+        }
+      </p>
+    </div>
+
+    <nav aria-label={t.navigation.mainLabel}>
+      <ul class="site-footer__list">
+        {
+          links.map((link) => (
+            <li>
+              <a href={pageUrl(language, link.page)} aria-current={link.page === page ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <ul class="site-footer__list site-footer__contact">
+      <li>
+        <a href={`mailto:${CONTACT.email}`}><Icon name="mail" />{CONTACT.email}</a>
+      </li>
+      <li>
+        <a href={whatsappUrl()} target="_blank" rel="noopener">
+          <Icon name="whatsapp" />{t.common.whatsapp}<span class="visually-hidden"> {t.common.opensInNewTab}</span>
+        </a>
+      </li>
+      {
+        activeSocialAccounts().map((account) => (
+          <li>
+            <a href={account.url} target="_blank" rel="noopener">
+              <Icon name={account.icon} />
+              <span>
+                {account.handle}
+                <span class="visually-hidden">
+                  {' '}
+                  {socialLabels[account.id]} {t.common.opensInNewTab}
+                </span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <ul class="site-footer__languages" aria-label={t.navigation.language}>
+      {
+        LANGUAGES.map((code) => (
+          <li>
+            <a href={pageUrl(code, page)} hreflang={LANGUAGE_DETAILS[code].htmlLang} lang={LANGUAGE_DETAILS[code].htmlLang} aria-current={code === language ? 'true' : undefined}>
+              {LANGUAGE_DETAILS[code].name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>&copy; {year} Aaron Benchimol. {t.footer.rights}</p>
+    <p>
+      {t.footer.madeBy}{' '}
+      <a href="https://www.waterwerk-websolutions.nl" target="_blank" rel="noopener">Waterwerk Websolutions</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border-soft);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+  }
+
+  @media (min-width: 760px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 1fr 1.3fr auto;
+      gap: var(--space-4);
+      align-items: start;
+    }
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+
+  .site-footer__descriptor {
+    margin-top: var(--space-1);
+    max-width: 24em;
+  }
+
+  /* Each role stays on one line; the line breaks only between roles */
+  .site-footer__descriptor-part {
+    white-space: nowrap;
+  }
+
+  .site-footer__list,
+  .site-footer__languages {
+    display: grid;
+    align-content: start;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.25rem;
+    text-decoration: none;
+    transition: color var(--dur-micro) ease;
+  }
+
+  .site-footer a[aria-current] {
+    color: var(--color-accent);
+  }
+
+  .site-footer__contact :global(.icon) {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--color-accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .site-footer a:hover {
+      color: var(--color-text);
+    }
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+    padding-block: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+    font-size: 0.8125rem;
+  }
+
+  .site-footer__bottom a {
+    display: inline;
+    min-height: 0;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

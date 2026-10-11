@@ -1,0 +1,42 @@
+---
+/**
+ * Link styled as a button (brand-benchy.md §6): gold primary for the main
+ * action, outline secondary. Styles live in global.css (.button).
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary';
+  /** Shows the arrow icon after the label. */
+  arrow?: boolean;
+  external?: boolean;
+  class?: string;
+}
+
+const { href, variant = 'primary', arrow = false, external = false, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['button', `button--${variant}`, className]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  <slot />
+  {arrow && <Icon name="arrow" class="button__arrow" />}
+</a>
+
+<style>
+  .button :global(.button__arrow) {
+    width: 1.1rem;
+    height: 1.1rem;
+    transition: transform var(--dur-micro) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .button:hover :global(.button__arrow) {
+      transform: translateX(4px);
+    }
+  }
+</style>

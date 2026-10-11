@@ -1,0 +1,50 @@
+---
+/**
+ * Closing call to action: a dark band lit from above by a low burgundy
+ * "stage light" (brand §2: burgundy as an occasional, light-like accent).
+ */
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  text: string;
+  cta: string;
+  href: string;
+}
+
+const { title, text, cta, href } = Astro.props;
+---
+
+<section class="contact-cta">
+  <div class="container container--narrow contact-cta__inner" data-reveal>
+    <h2 class="contact-cta__title">{title}</h2>
+    <p class="lead contact-cta__text">{text}</p>
+    <Button href={href} arrow>{cta}</Button>
+  </div>
+</section>
+
+<style>
+  .contact-cta {
+    position: relative;
+    padding-block: var(--section-y);
+    background:
+      var(--stage-light),
+      var(--color-bg);
+    border-top: 1px solid var(--color-border-soft);
+    text-align: center;
+  }
+
+  .contact-cta__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+  }
+
+  .contact-cta__title {
+    font-size: var(--text-page);
+  }
+
+  .contact-cta__text {
+    margin-inline: auto;
+  }
+</style>

@@ -1,0 +1,15 @@
+# dependencies
+node_modules/
+
+# Astro build output and generated types
+dist/
+.astro/
+
+# local screenshots and review captures
+temp-screenshots/
+.impeccable/review/
+.impeccable/hook.cache.json
+
+# OS files
+.DS_Store
+Thumbs.db

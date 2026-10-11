@@ -1,0 +1,77 @@
+/*
+  Brand tokens: the only place raw colour values live.
+  Source of truth: ../wesite-info/brand-benchy.md §2–3.
+  Components use these variables, never hex values.
+*/
+:root {
+  /* Core brand colours */
+  --color-bg: #0b0b0b; /* Obsidian Black: page, navigation, footer */
+  --color-text: #f5efdf; /* Warm Ivory: text on dark, light panels */
+  --color-accent: #c9a96e; /* Muted Gold: primary buttons, fine highlights */
+  --color-burgundy: #7a2e35; /* Burgundy: occasional accent, stage light */
+  --color-charcoal: #4a4444; /* Charcoal Grey: secondary surfaces, dividers */
+
+  /* Supporting interface values (brand-benchy.md: derived, not new brand colours) */
+  --color-surface: #151412;
+  --color-border: rgba(245, 239, 223, 0.22);
+  --color-border-soft: rgba(245, 239, 223, 0.12);
+  --color-text-muted: #c4bfb4;
+  --color-accent-strong: #d8bd88; /* gold hover, a step lighter */
+  --color-on-accent: #0b0b0b;
+  /* WhatsApp green (owner request: floating WhatsApp button); not a brand colour */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-strong: #1ebe5b;
+  --color-on-whatsapp: #ffffff;
+  --shadow-float: 0 10px 24px -10px rgba(0, 0, 0, 0.7); /* floating WhatsApp button */
+  --color-outline: rgba(245, 239, 223, 0.45); /* secondary button and header Contact outline */
+  --color-header-bg: rgba(11, 11, 11, 0.92); /* solid header over content */
+
+  /* Image grading: obsidian shades that keep type readable over photographs */
+  --shade-hero-side: linear-gradient(90deg, rgba(11, 11, 11, 0.88) 0%, rgba(11, 11, 11, 0.55) 38%, rgba(11, 11, 11, 0) 70%);
+  --shade-hero-bottom: linear-gradient(0deg, rgba(11, 11, 11, 0.92) 0%, rgba(11, 11, 11, 0) 46%);
+  --shade-floor: linear-gradient(0deg, rgba(11, 11, 11, 0.94) 0%, rgba(11, 11, 11, 0.35) 45%, rgba(11, 11, 11, 0.1) 100%);
+
+  /* Burgundy used as light, never as fill: the closing band's stage light */
+  --stage-light: radial-gradient(60% 90% at 50% 0%, rgba(122, 46, 53, 0.42), transparent 70%);
+  --color-error: #e3a2a8; /* burgundy lifted for readable error text on black */
+  --color-error-line: rgba(217, 138, 145, 0.6);
+
+  /* Typography (brand-benchy.md §3) */
+  --font-display: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  --font-body: var(--font-montserrat), 'Montserrat', Arial, sans-serif;
+
+  /* Type scale: fluid, from the brand's desktop starting sizes down to mobile */
+  --text-hero: clamp(3rem, 1.6rem + 6vw, 5.5rem); /* 48 → 88px */
+  --text-page: clamp(2.5rem, 1.7rem + 3.4vw, 4rem); /* 40 → 64px */
+  --text-section: clamp(1.875rem, 1.5rem + 1.6vw, 2.5rem); /* 30 → 40px */
+  --text-card: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem); /* 22 → 28px */
+  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem); /* 16 → 17px */
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-small: 0.875rem;
+  --text-label: 0.75rem; /* letter-spaced labels and metadata */
+
+  /* Spacing scale (8px rhythm) */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 8rem;
+  --section-y: clamp(4.5rem, 3rem + 6vw, 8rem);
+
+  /* Layout */
+  --container: 1240px;
+  --container-narrow: 760px;
+  --gutter: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  --header-height: 4.5rem;
+  --radius: 3px; /* subtle corner radius (brand §6: no pills) */
+
+  /* Motion (animate / Emil Kowalski curves) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 140ms;
+  --dur-micro: 200ms;
+  --dur-reveal: 560ms;
+}

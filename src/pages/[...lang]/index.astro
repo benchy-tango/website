@@ -1,0 +1,375 @@
+---
+/**
+ * HOME: hero → Dance & Music (two service panels, the main business) →
+ * Visual Art (quieter, three frames) → About → closing contact band.
+ * Section order and copy follow navegacion.md and the architecture brief §4.
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { ARTWORKS, EXAMPLE_FRAME_COUNT } from '../../data/artworks';
+import { enquiryUrl, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
+import dancingPhoto from '../../assets/photos/aaron-dancing.jpg';
+import teachingPhoto from '../../assets/photos/aaron-teaching.jpg';
+import djPhoto from '../../assets/photos/aaron-dj.jpg';
+import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const h = t.home;
+
+const homeArtworks = ARTWORKS.slice(0, EXAMPLE_FRAME_COUNT.home);
+const exampleShapes = ['portrait', 'landscape', 'square'] as const;
+---
+
+<BaseLayout language={language} page="home" title={h.title} description={h.description} headerOverlay>
+  <!-- HERO: the dance itself, full-bleed; name set large at the lower left -->
+  <section class="hero">
+    <Image
+      src={dancingPhoto}
+      alt={h.hero.photoAlt}
+      class="hero__photo"
+      widths={[828, 1280, 1920, 2048]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="container hero__content">
+      <h1 class="hero__name">Aaron Benchimol</h1>
+      <span class="hero__line" aria-hidden="true"></span>
+      <p class="label hero__subtitle">{h.hero.subtitle}</p>
+      <p class="hero__text">{h.hero.text}</p>
+      <div class="button-row hero__actions">
+        <Button href={pageUrl(language, 'danceMusic')} arrow>{h.hero.primaryCta}</Button>
+        <Button href={pageUrl(language, 'art')} variant="secondary">{h.hero.secondaryCta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DANCE & MUSIC: the main commercial area, two editorial service panels -->
+  <section class="section" aria-labelledby="dance-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <h2 id="dance-title">{h.dance.title}</h2>
+        <p class="lead">{h.dance.text}</p>
+      </div>
+
+      <div class="services">
+        <article class="service service--classes">
+          <div class="service__photo" data-reveal-image>
+            <Image src={teachingPhoto} alt={h.dance.classes.photoAlt} widths={[640, 960, 1400]} sizes="(min-width: 960px) 58vw, 100vw" loading="lazy" />
+          </div>
+          <div class="service__body" data-reveal>
+            <h3>{h.dance.classes.title}</h3>
+            <p class="text">{h.dance.classes.text}</p>
+            <Button href={enquiryUrl(language, 'classes')} arrow>{h.dance.classes.cta}</Button>
+          </div>
+        </article>
+
+        <article class="service service--dj">
+          <div class="service__photo" data-reveal-image style="--reveal-delay:120ms">
+            <Image src={djPhoto} alt={h.dance.dj.photoAlt} widths={[480, 800, 1100]} sizes="(min-width: 960px) 38vw, 100vw" loading="lazy" />
+          </div>
+          <div class="service__body" data-reveal>
+            <h3>{h.dance.dj.title}</h3>
+            <p class="text">{h.dance.dj.text}</p>
+            <Button href={enquiryUrl(language, 'dj')} arrow>{h.dance.dj.cta}</Button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISUAL ART: quieter than Dance & Music; three works (or labelled example frames) -->
+  <section class="section art-teaser" aria-labelledby="art-title">
+    <div class="container">
+      <div class="art-teaser__head" data-reveal>
+        <div class="section-head">
+          <h2 id="art-title">{h.art.title}</h2>
+          <p class="lead">{h.art.text}</p>
+        </div>
+        <a href={pageUrl(language, 'art')} class="text-link">{h.art.cta}</a>
+      </div>
+      <div class="art-teaser__grid">
+        {
+          homeArtworks.length
+            ? homeArtworks.map((artwork, index) => <ArtworkCard language={language} artwork={artwork} revealDelay={index * 80} />)
+            : exampleShapes.map((shape, index) => <ArtworkCard language={language} shape={shape} revealDelay={index * 80} />)
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" aria-labelledby="about-title">
+    <div class="container about-teaser">
+      <div class="about-teaser__photo" data-reveal-image>
+        <Image src={portraitPhoto} alt={h.about.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 40vw, 100vw" loading="lazy" />
+      </div>
+      <div class="about-teaser__body" data-reveal>
+        <h2 id="about-title">{h.about.title}</h2>
+        <p class="lead">{h.about.text}</p>
+        <Button href={pageUrl(language, 'about')} variant="secondary">{h.about.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <ContactCTA title={h.final.title} text={h.final.text} cta={h.final.cta} href={pageUrl(language, 'contact')} />
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: max(100svh, 40rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero :global(.hero__photo) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 30%;
+  }
+
+  /* Low-key grading: dark from the left and from below so the type reads,
+     the couple stays lit (brand §4: overlays only where text needs them). */
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--shade-hero-side), var(--shade-hero-bottom);
+  }
+
+  .hero__content {
+    display: grid;
+    justify-items: start;
+    padding-top: calc(var(--header-height) + var(--space-6));
+    padding-bottom: clamp(3.5rem, 2rem + 6vh, 6.5rem);
+  }
+
+  .hero__name {
+    font-size: var(--text-hero);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    max-width: 8.5em;
+  }
+
+  .hero__line {
+    display: block;
+    width: min(18rem, 60vw);
+    height: 1px;
+    margin-block: var(--space-3) var(--space-2);
+    background: var(--color-accent);
+    transform-origin: left;
+  }
+
+  .hero__subtitle {
+    margin-bottom: var(--space-2);
+  }
+
+  .hero__text {
+    max-width: 30em;
+    font-size: var(--text-lead);
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .hero__actions {
+    margin-top: var(--space-4);
+  }
+
+  /* The opening moment: name rises in, the gold line is drawn under it,
+     then the rest follows. Short, and never blocks reading. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__name {
+      animation: hero-rise 900ms var(--ease-out) 100ms both;
+    }
+
+    .hero__line {
+      animation: hero-line 1100ms var(--ease-in-out) 350ms both;
+    }
+
+    .hero__subtitle,
+    .hero__text,
+    .hero__actions {
+      animation: hero-rise 700ms var(--ease-out) both;
+    }
+
+    .hero__subtitle {
+      animation-delay: 650ms;
+    }
+
+    .hero__text {
+      animation-delay: 740ms;
+    }
+
+    .hero__actions {
+      animation-delay: 830ms;
+    }
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @keyframes hero-line {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  /* ---------- Section heads ---------- */
+  .section-head {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 40rem;
+  }
+
+  /* ---------- Dance & Music services ---------- */
+  .services {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .service {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .service__photo {
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .service__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .service--classes .service__photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .service--classes .service__photo :global(img) {
+    object-position: 50% 40%;
+  }
+
+  .service--dj .service__photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  .service--dj .service__photo :global(img) {
+    object-position: 50% 20%;
+  }
+
+  .service__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  .service__body :global(.button) {
+    margin-top: var(--space-1);
+  }
+
+  @media (min-width: 960px) {
+    .services {
+      grid-template-columns: 7fr 5fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+
+    /* Offset the DJ panel: two panels in conversation, not a card row */
+    .service--dj {
+      margin-top: var(--space-8);
+    }
+  }
+
+  /* ---------- Art teaser ---------- */
+  .art-teaser {
+    background: var(--color-surface);
+  }
+
+  .art-teaser__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  /* Phones: two works side by side (the third waits on the Art page) */
+  .art-teaser__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: end;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .art-teaser__grid > :global(:nth-child(3)) {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .art-teaser__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+
+    .art-teaser__grid > :global(:nth-child(3)) {
+      display: block;
+    }
+  }
+
+  /* ---------- About teaser ---------- */
+  .about-teaser {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .about-teaser__photo {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    max-width: 30rem;
+  }
+
+  .about-teaser__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 30%;
+  }
+
+  .about-teaser__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 960px) {
+    .about-teaser {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

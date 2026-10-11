@@ -1,0 +1,440 @@
+---
+/**
+ * CONTACT: enquiry form (Netlify Forms) + direct contact details.
+ *
+ * Netlify Forms:
+ * - data-netlify="true" lets Netlify detect the form "contact" at deploy time
+ *   (both language pages post to the same form).
+ * - The hidden "form-name" field tells Netlify which form a JavaScript
+ *   submission belongs to; "bot-field" is a honeypot.
+ * - The enquiry values stay in English in both languages, so every
+ *   notification email reads the same; "language" says which page sent it.
+ * - With JavaScript the form is sent in the background and the success
+ *   message only appears after Netlify answers OK. Without JavaScript it is
+ *   a normal POST and Netlify shows its own confirmation page.
+ * - ?enquiry=<type> in the URL preselects the enquiry type (service CTAs).
+ * The notification email address is set in the Netlify dashboard.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import { CONTACT, activeSocialAccounts, whatsappUrl } from '../../data/contact';
+import { ENQUIRY_TYPES, LANGUAGE_DETAILS, getTranslation, languageStaticPaths, type Language } from '../../i18n/languages';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const c = t.contact;
+const f = c.form;
+const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.common.instagramArt, facebook: '' };
+---
+
+<BaseLayout language={language} page="contact" title={c.title} description={c.description}>
+  <PageIntro title={c.title} text={c.text} />
+
+  <section class="contact" aria-label={c.title}>
+    <div class="container contact__grid">
+      <form
+        id="contact-form"
+        class="contact-form"
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        novalidate
+        data-contact-form
+        data-sending={f.sending}
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="language" value={LANGUAGE_DETAILS[language].name} />
+        <p class="visually-hidden" aria-hidden="true">
+          <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cf-name">{f.name}</label>
+            <input id="cf-name" name="name" type="text" autocomplete="name" required aria-describedby="cf-name-error" />
+            <p id="cf-name-error" class="field__error" data-error hidden>{f.errors.name}</p>
+          </div>
+          <div class="field">
+            <label for="cf-email">{f.email}</label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" required aria-describedby="cf-email-error" />
+            <p id="cf-email-error" class="field__error" data-error hidden>{f.errors.email}</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cf-enquiry">{f.enquiry}</label>
+          <div class="select">
+            <select id="cf-enquiry" name="enquiry" data-enquiry-select>
+              {ENQUIRY_TYPES.map((type) => <option value={type}>{f.enquiryTypes[type]}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cf-details">{f.details} <span class="field__optional">{f.optional}</span></label>
+          <input id="cf-details" name="details" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="cf-message">{f.message}</label>
+          <textarea id="cf-message" name="message" rows="6" required aria-describedby="cf-message-error"></textarea>
+          <p id="cf-message-error" class="field__error" data-error hidden>{f.errors.message}</p>
+        </div>
+
+        <p class="contact-form__privacy">{f.privacy}</p>
+
+        <button type="submit" class="button button--primary" data-submit>{f.submit}</button>
+
+        <p class="contact-form__status contact-form__status--error" role="alert" data-form-error hidden>
+          {f.error} <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+        </p>
+      </form>
+
+      <div class="contact-form__status contact-form__status--success" role="status" tabindex="-1" data-form-success hidden>
+        <p>{f.success}</p>
+      </div>
+
+      <aside class="direct" aria-labelledby="direct-title">
+        <h2 id="direct-title" class="direct__title">{c.direct.title}</h2>
+        <dl class="direct__list">
+          <div>
+            <dt class="label">{c.direct.emailLabel}</dt>
+            <dd><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></dd>
+          </div>
+          <div>
+            <dt class="label">{c.direct.locationLabel}</dt>
+            <dd>{c.direct.location}</dd>
+          </div>
+          <div>
+            <dt class="label">{c.direct.socialLabel}</dt>
+            <dd>
+              <ul class="direct__social">
+                {
+                  activeSocialAccounts().map((account) => (
+                    <li>
+                      <a href={account.url} target="_blank" rel="noopener">
+                        <Icon name={account.icon} />
+                        <span>{account.handle}</span>
+                        <span class="direct__social-note">{socialLabels[account.id]}</span>
+                        <span class="visually-hidden"> {t.common.opensInNewTab}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </dd>
+          </div>
+        </dl>
+        <a href={whatsappUrl()} class="button button--secondary direct__whatsapp" target="_blank" rel="noopener">
+          <Icon name="whatsapp" />
+          {c.direct.whatsappCta}
+          <span class="visually-hidden"> {t.common.opensInNewTab}</span>
+        </a>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    padding-bottom: var(--section-y);
+  }
+
+  .contact__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 960px) {
+    .contact__grid {
+      grid-template-columns: 7fr 4fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    .contact-form,
+    [data-form-success] {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .direct {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  /* ---------- Form ---------- */
+  .contact-form {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .field-row {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .field label {
+    font-size: var(--text-small);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .field__optional {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.8rem 0.95rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 1rem;
+    caret-color: var(--color-accent);
+    transition: border-color var(--dur-micro) ease;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  .field input:focus-visible,
+  .field select:focus-visible,
+  .field textarea:focus-visible {
+    border-color: var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--color-error-line);
+  }
+
+  .field__error {
+    font-size: var(--text-small);
+    color: var(--color-error);
+  }
+
+  .select {
+    position: relative;
+  }
+
+  .select select {
+    appearance: none;
+    padding-right: 2.75rem;
+    cursor: pointer;
+  }
+
+  .select::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1.1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 1.5px solid var(--color-accent);
+    border-bottom: 1.5px solid var(--color-accent);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .contact-form__privacy {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    max-width: 40em;
+  }
+
+  .contact-form [data-submit] {
+    justify-self: start;
+  }
+
+  .contact-form [data-submit]:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .contact-form__status {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
+    font-size: var(--text-small);
+  }
+
+  .contact-form__status--error {
+    border: 1px solid var(--color-error-line);
+    color: var(--color-error);
+  }
+
+  .contact-form__status--success {
+    border: 1px solid var(--color-accent);
+    color: var(--color-text);
+    font-size: var(--text-lead);
+  }
+
+  /* ---------- Direct contact ---------- */
+  .direct {
+    display: grid;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  @media (min-width: 960px) {
+    .direct {
+      padding-top: 0;
+      padding-left: var(--space-5);
+      border-top: 0;
+      border-left: 1px solid var(--color-border-soft);
+    }
+  }
+
+  .direct__title {
+    font-size: var(--text-card);
+  }
+
+  .direct__list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .direct__list dt {
+    margin-bottom: 0.35rem;
+  }
+
+  .direct__list dd {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .direct__list a {
+    color: var(--color-text);
+    text-decoration-color: var(--color-accent);
+  }
+
+  .direct__social {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .direct__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.5rem;
+    text-decoration: none;
+  }
+
+  .direct__social :global(.icon) {
+    color: var(--color-accent);
+  }
+
+  .direct__social-note {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .direct__whatsapp {
+    justify-self: start;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  if (form) {
+    const success = document.querySelector<HTMLElement>('[data-form-success]');
+    const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
+    const select = form.querySelector<HTMLSelectElement>('[data-enquiry-select]');
+    const required = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'));
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Service CTAs link here with ?enquiry=dj (or classes, art…): preselect it.
+    const enquiry = new URLSearchParams(window.location.search).get('enquiry');
+    if (select && enquiry && Array.from(select.options).some((option) => option.value === enquiry)) select.value = enquiry;
+
+    const isValid = (field: HTMLInputElement | HTMLTextAreaElement) =>
+      field.type === 'email' ? emailPattern.test(field.value.trim()) : field.value.trim() !== '';
+
+    const showState = (field: HTMLInputElement | HTMLTextAreaElement, valid: boolean) => {
+      const error = field.parentElement?.querySelector<HTMLElement>('[data-error]');
+      if (error) error.hidden = valid;
+      if (valid) field.removeAttribute('aria-invalid');
+      else field.setAttribute('aria-invalid', 'true');
+    };
+
+    // Once a field was marked wrong, clear the message as soon as it is fixed.
+    required.forEach((field) =>
+      field.addEventListener('input', () => {
+        if (field.getAttribute('aria-invalid') === 'true' && isValid(field)) showState(field, true);
+      })
+    );
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const firstInvalid = required.find((field) => !isValid(field));
+      required.forEach((field) => showState(field, isValid(field)));
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      const label = submit?.textContent ?? '';
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = form.dataset.sending ?? label;
+      }
+      if (errorBox) errorBox.hidden = true;
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+        });
+        if (!response.ok) throw new Error(`Form submission failed: ${response.status}`);
+
+        form.hidden = true;
+        if (success) {
+          success.hidden = false;
+          success.focus();
+        }
+      } catch {
+        if (errorBox) errorBox.hidden = false;
+        submit?.focus();
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.textContent = label;
+        }
+      }
+    });
+  }
+</script>

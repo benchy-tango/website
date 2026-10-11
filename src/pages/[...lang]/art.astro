@@ -1,0 +1,112 @@
+---
+/**
+ * VISUAL ART: statement → gallery (real works from src/data/artworks.ts,
+ * or labelled example frames while it is empty) → creative process with
+ * the art Instagram. Paintings are never overlaid or filtered (brand §4).
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import { ARTWORKS, EXAMPLE_FRAME_COUNT } from '../../data/artworks';
+import { SOCIAL_ACCOUNTS } from '../../data/contact';
+import { enquiryUrl, getTranslation, languageStaticPaths, type Language } from '../../i18n/languages';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const a = t.art;
+const artInstagram = SOCIAL_ACCOUNTS.find((account) => account.id === 'instagramArt' && account.url);
+
+// Placeholder rhythm: alternate shapes so the empty gallery still reads as a hang.
+const exampleShapes = ['portrait', 'landscape', 'square', 'landscape', 'portrait', 'square'] as const;
+const exampleFrames = exampleShapes.slice(0, EXAMPLE_FRAME_COUNT.gallery);
+---
+
+<BaseLayout language={language} page="art" title={a.title} description={a.description}>
+  <PageIntro title={a.title} text={a.text}>
+    <Button href={enquiryUrl(language, 'art')} arrow>{a.cta}</Button>
+  </PageIntro>
+
+  <section class="gallery" aria-label={a.galleryLabel}>
+    <div class="container gallery__grid">
+      {
+        ARTWORKS.length
+          ? ARTWORKS.map((artwork, index) => <ArtworkCard language={language} artwork={artwork} revealDelay={(index % 3) * 80} />)
+          : exampleFrames.map((shape, index) => <ArtworkCard language={language} shape={shape} revealDelay={(index % 3) * 80} />)
+      }
+    </div>
+  </section>
+
+  <section class="section process" aria-labelledby="process-title">
+    <div class="container container--narrow process__inner" data-reveal>
+      <h2 id="process-title">{a.process.title}</h2>
+      <p class="lead">{a.process.text}</p>
+      <div class="button-row">
+        <Button href={enquiryUrl(language, 'art')} variant="secondary">{a.process.cta}</Button>
+      </div>
+      {
+        artInstagram && (
+          <a href={artInstagram.url} class="text-link process__instagram" target="_blank" rel="noopener">
+            <Icon name="instagram" />
+            {a.followArt}: {artInstagram.handle}
+            <span class="visually-hidden"> {t.common.opensInNewTab}</span>
+          </a>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .gallery {
+    padding-bottom: var(--section-y);
+  }
+
+  /* A salon hang in columns: works of different shapes stack without gaps.
+     Two columns even on phones, so six works never become an endless scroll. */
+  .gallery__grid {
+    columns: 2;
+    column-gap: var(--space-2);
+  }
+
+  .gallery__grid > :global(*) {
+    break-inside: avoid;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 600px) {
+    .gallery__grid {
+      column-gap: var(--space-4);
+    }
+
+    .gallery__grid > :global(*) {
+      margin-bottom: var(--space-5);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .gallery__grid {
+      columns: 3;
+    }
+  }
+
+  .process {
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .process__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  .process__instagram {
+    margin-top: var(--space-2);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: var(--text-small);
+  }
+</style>

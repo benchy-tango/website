@@ -1,0 +1,90 @@
+---
+/**
+ * Floating WhatsApp button (owner request): a green circle fixed to the
+ * lower right corner on every page, opening a chat with Aaron with a short
+ * greeting already typed in the page's language.
+ */
+import { whatsappUrl } from '../data/contact';
+import { getTranslation, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const t = getTranslation(language).whatsappButton;
+---
+
+<a href={whatsappUrl(t.message)} class="whatsapp-button" target="_blank" rel="noopener" aria-label={t.label}>
+  <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path
+      fill="currentColor"
+      d="M16.04 3C8.86 3 3.02 8.83 3.02 16c0 2.29.6 4.53 1.75 6.5L3 29l6.68-1.75A13 13 0 0 0 16.04 29C23.2 29 29 23.17 29 16S23.2 3 16.04 3Zm0 23.8c-1.98 0-3.92-.53-5.61-1.53l-.4-.24-3.97 1.04 1.06-3.86-.26-.4A10.76 10.76 0 0 1 5.24 16c0-5.95 4.85-10.8 10.8-10.8 5.94 0 10.76 4.85 10.76 10.8 0 5.95-4.82 10.8-10.76 10.8Zm5.92-8.08c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.21.32-.84 1.06-1.03 1.27-.19.22-.38.24-.7.08-.32-.16-1.37-.5-2.6-1.6-.96-.86-1.61-1.92-1.8-2.24-.19-.32-.02-.5.14-.66.15-.14.32-.38.48-.57.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.57-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.21 0-.57.08-.86.4-.3.32-1.13 1.1-1.13 2.69s1.16 3.12 1.32 3.33c.16.22 2.28 3.48 5.53 4.88.77.33 1.37.53 1.84.68.77.25 1.48.21 2.04.13.62-.09 1.92-.78 2.19-1.54.27-.76.27-1.41.19-1.54-.08-.14-.3-.22-.62-.38Z"
+    ></path>
+  </svg>
+</a>
+
+<style>
+  .whatsapp-button {
+    position: fixed;
+    right: max(1.25rem, env(safe-area-inset-right));
+    bottom: max(1.25rem, env(safe-area-inset-bottom));
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--color-whatsapp);
+    color: var(--color-on-whatsapp);
+    box-shadow: var(--shadow-float);
+    transition:
+      transform var(--dur-press) var(--ease-out),
+      background-color var(--dur-micro) ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .whatsapp-button svg {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
+  .whatsapp-button:active {
+    transform: scale(0.94);
+  }
+
+  .whatsapp-button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .whatsapp-button:hover {
+      transform: scale(1.06);
+      background: var(--color-whatsapp-strong);
+    }
+  }
+
+  /* Appears softly once the page has painted; never moves afterwards */
+  @media (prefers-reduced-motion: no-preference) {
+    .whatsapp-button {
+      animation: whatsapp-in 420ms var(--ease-out) 600ms both;
+    }
+  }
+
+  @keyframes whatsapp-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .whatsapp-button {
+      right: 2rem;
+      bottom: 2rem;
+      width: 3.75rem;
+      height: 3.75rem;
+    }
+  }
+</style>

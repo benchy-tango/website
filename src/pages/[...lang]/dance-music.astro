@@ -1,0 +1,189 @@
+---
+/**
+ * DANCE & MUSIC: intro → Tango Classes → Tango DJ → "Moments on the
+ * dance floor" (full-bleed photo) → contact band. Every service CTA opens
+ * the contact form with its enquiry type chosen.
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { enquiryUrl, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
+import teachingPhoto from '../../assets/photos/aaron-teaching.jpg';
+import djPhoto from '../../assets/photos/aaron-dj.jpg';
+import dancingPhoto from '../../assets/photos/aaron-dancing.jpg';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const d = t.danceMusic;
+---
+
+<BaseLayout language={language} page="danceMusic" title={d.title} description={d.description}>
+  <PageIntro title={d.title} text={d.intro} />
+
+  <!-- TANGO CLASSES -->
+  <section class="section offer" id="classes" aria-labelledby="classes-title">
+    <div class="container offer__grid">
+      <div class="offer__photo offer__photo--landscape" data-reveal-image>
+        <Image src={teachingPhoto} alt={d.classes.photoAlt} widths={[640, 1000, 1500]} sizes="(min-width: 960px) 55vw, 100vw" loading="lazy" />
+      </div>
+      <div class="offer__body" data-reveal>
+        <h2 id="classes-title">{d.classes.title}</h2>
+        <p class="lead">{d.classes.text}</p>
+        <ul class="offer__list">
+          {d.classes.formats.map((format) => <li>{format}</li>)}
+        </ul>
+        <Button href={enquiryUrl(language, 'classes')} arrow>{d.classes.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TANGO DJ (mirrored) -->
+  <section class="section offer offer--mirrored" id="dj" aria-labelledby="dj-title">
+    <div class="container offer__grid">
+      <div class="offer__photo offer__photo--portrait" data-reveal-image>
+        <Image src={djPhoto} alt={d.dj.photoAlt} widths={[480, 800, 1100]} sizes="(min-width: 960px) 40vw, 100vw" loading="lazy" />
+      </div>
+      <div class="offer__body" data-reveal>
+        <h2 id="dj-title">{d.dj.title}</h2>
+        <p class="lead">{d.dj.text}</p>
+        <ul class="offer__list">
+          {d.dj.events.map((event) => <li>{event}</li>)}
+        </ul>
+        <Button href={enquiryUrl(language, 'dj')} arrow>{d.dj.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOMENTS ON THE DANCE FLOOR: one cinematic, full-bleed image -->
+  <section class="floor" aria-labelledby="floor-title">
+    <Image src={dancingPhoto} alt={d.floor.photoAlt} class="floor__photo" widths={[828, 1280, 2048]} sizes="100vw" loading="lazy" />
+    <div class="floor__shade" aria-hidden="true"></div>
+    <div class="container floor__content" data-reveal>
+      <h2 id="floor-title">{d.floor.title}</h2>
+      <p class="lead">{d.floor.text}</p>
+      <Button href={enquiryUrl(language, 'classes')} variant="secondary">{d.floor.cta}</Button>
+    </div>
+  </section>
+
+  <ContactCTA title={t.home.final.title} text={t.home.final.text} cta={t.home.final.cta} href={pageUrl(language, 'contact')} />
+</BaseLayout>
+
+<style>
+  .offer {
+    padding-top: 0;
+  }
+
+  .offer__grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .offer__photo {
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .offer__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .offer__photo--landscape {
+    aspect-ratio: 4 / 3;
+  }
+
+  .offer__photo--landscape :global(img) {
+    object-position: 50% 40%;
+  }
+
+  .offer__photo--portrait {
+    aspect-ratio: 4 / 5;
+    max-width: 32rem;
+  }
+
+  .offer__photo--portrait :global(img) {
+    object-position: 50% 20%;
+  }
+
+  .offer__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  /* Set like a milonga programme: one item per line, divided by fine rules */
+  .offer__list {
+    width: 100%;
+    max-width: 24rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .offer__list li {
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--color-border-soft);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 960px) {
+    .offer__grid {
+      grid-template-columns: 7fr 5fr;
+      gap: var(--space-7);
+    }
+
+    .offer--mirrored .offer__grid {
+      grid-template-columns: 5fr 6fr;
+    }
+
+    .offer--mirrored .offer__photo {
+      order: 2;
+      justify-self: end;
+    }
+  }
+
+  /* ---------- Full-bleed floor moment ---------- */
+  .floor {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: min(88svh, 52rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .floor :global(.floor__photo) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 60% 35%;
+  }
+
+  .floor__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--shade-floor);
+  }
+
+  .floor__content {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-block: var(--space-7) var(--space-6);
+  }
+</style>

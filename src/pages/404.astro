@@ -1,0 +1,30 @@
+---
+/** Page shown for unknown URLs (English, the default language). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { getTranslation, pageUrl } from '../i18n/languages';
+
+const t = getTranslation('en').notFound;
+---
+
+<BaseLayout language="en" page="home" title={t.title} description={t.text} noindex>
+  <section class="not-found">
+    <div class="container not-found__inner">
+      <h1 class="hairline-title">{t.title}</h1>
+      <p class="lead">{t.text}</p>
+      <Button href={pageUrl('en', 'home')} arrow>{t.cta}</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: calc(var(--header-height) + var(--space-8)) var(--space-8);
+  }
+
+  .not-found__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+</style>

@@ -1,0 +1,105 @@
+---
+/**
+ * ABOUT: portrait + story ("Meet Aaron Benchimol") → artistic philosophy
+ * set large as an editorial statement. CTAs lead to Contact and to
+ * Dance & Music (architecture §4: About points back to the business).
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import { getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
+import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const a = t.about;
+---
+
+<BaseLayout language={language} page="about" title={a.title} description={a.description}>
+  <section class="story">
+    <div class="container story__grid">
+      <div class="story__photo" data-reveal-image>
+        <Image src={portraitPhoto} alt={a.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 42vw, 100vw" loading="eager" />
+      </div>
+      <div class="story__body">
+        <h1 class="hairline-title">{a.title}</h1>
+        <p class="lead">{a.text}</p>
+        <Button href={pageUrl(language, 'contact')} arrow>{a.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section philosophy" aria-labelledby="philosophy-title">
+    <div class="container container--narrow philosophy__inner" data-reveal>
+      <h2 id="philosophy-title">{a.philosophy.title}</h2>
+      <blockquote class="philosophy__statement"><p>{a.philosophy.text}</p></blockquote>
+      <Button href={pageUrl(language, 'danceMusic')} variant="secondary">{a.philosophy.cta}</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .story {
+    padding-block: calc(var(--header-height) + var(--space-6)) var(--section-y);
+  }
+
+  .story__grid {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .story__photo {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    max-width: 34rem;
+    background: var(--color-surface);
+  }
+
+  .story__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 30%;
+  }
+
+  .story__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 960px) {
+    .story__grid {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-7);
+    }
+  }
+
+  .philosophy {
+    border-top: 1px solid var(--color-border-soft);
+    text-align: center;
+  }
+
+  .philosophy__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+  }
+
+  /* The belief, set as a pull quote under the section title */
+  .philosophy__statement {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-card);
+    line-height: 1.45;
+    color: var(--color-text-muted);
+    max-width: 26em;
+  }
+
+  .philosophy__statement p {
+    text-wrap: balance;
+  }
+</style>

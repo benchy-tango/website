@@ -1,0 +1,37 @@
+---
+/**
+ * Opening of an inner page: the page title in Playfair with the gold
+ * hairline under it, and one short lead paragraph. Extra content (buttons)
+ * goes in the slot.
+ */
+interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<section class="page-intro">
+  <div class="container page-intro__inner">
+    <h1 class="page-intro__title hairline-title">{title}</h1>
+    <p class="lead page-intro__text">{text}</p>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-intro {
+    padding-block: calc(var(--header-height) + var(--space-7)) var(--space-6);
+  }
+
+  .page-intro__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  .page-intro__title {
+    max-width: 14em;
+  }
+</style>

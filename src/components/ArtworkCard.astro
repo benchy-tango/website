@@ -1,0 +1,137 @@
+---
+/**
+ * One painting in a gallery. With an artwork: the image at full colour (no
+ * overlays, brand §4) and its known details. Without one: an empty, clearly
+ * labelled example frame (a flat panel with a fine outline), so nobody
+ * mistakes it for a real work.
+ */
+import { Image } from 'astro:assets';
+import type { Artwork } from '../data/artworks';
+import { getTranslation, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+  artwork?: Artwork;
+  /** Shape of the example frame, so a gallery of placeholders keeps a rhythm. */
+  shape?: 'portrait' | 'square' | 'landscape';
+  revealDelay?: number;
+}
+
+const { language, artwork, shape = 'portrait', revealDelay = 0 } = Astro.props;
+const t = getTranslation(language).common;
+// Real works keep their own proportions; the source photos are 700px, so no larger sizes are generated.
+const artworkRatio = artwork ? `${artwork.image.width} / ${artwork.image.height}` : undefined;
+const artworkWidths = artwork ? [360, 540, 700].filter((width) => width <= artwork.image.width) : [];
+const details = artwork ? [artwork.year, artwork.medium?.[language], artwork.dimensions].filter(Boolean).join(', ') : '';
+---
+
+<figure class:list={['artwork', `artwork--${shape}`]} data-reveal style={`--reveal-delay:${revealDelay}ms`}>
+  {
+    artwork ? (
+      <div class="artwork__frame" style={`aspect-ratio:${artworkRatio}`}>
+        <Image
+          src={artwork.image}
+          alt={artwork.alt[language]}
+          widths={artworkWidths}
+          sizes="(min-width: 960px) 30vw, 50vw"
+          loading="lazy"
+        />
+      </div>
+    ) : (
+      <div class="artwork__frame artwork__frame--example" role="img" aria-label={`${t.exampleFrame}: ${t.artworkComingSoon}`}>
+        <span class="artwork__example" aria-hidden="true">
+          <span class="artwork__example-label">{t.exampleFrame}</span>
+          <span class="artwork__example-text">{t.artworkComingSoon}</span>
+        </span>
+      </div>
+    )
+  }
+  {
+    artwork && (artwork.title || details) && (
+      <figcaption class="artwork__caption">
+        {artwork.title && <span class="artwork__title">{artwork.title}</span>}
+        {details && <span class="artwork__details">{details}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .artwork {
+    margin: 0;
+  }
+
+  .artwork__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-surface);
+  }
+
+  .artwork--square .artwork__frame {
+    aspect-ratio: 1;
+  }
+
+  .artwork--landscape .artwork__frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .artwork__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .artwork:hover .artwork__frame :global(img) {
+      transform: scale(1.025);
+    }
+  }
+
+  /* Honest placeholder: a flat panel with a fine outline where a painting will hang */
+  .artwork__frame--example {
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--color-border);
+  }
+
+  .artwork__example {
+    display: grid;
+    gap: 0.35rem;
+    padding: var(--space-2);
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .artwork__example-label {
+    font-size: clamp(0.625rem, 0.58rem + 0.2vw, 0.75rem);
+    font-weight: 500;
+    color: var(--color-accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .artwork__example-text {
+    font-family: var(--font-display);
+    font-size: clamp(0.9375rem, 0.85rem + 0.4vw, 1.125rem);
+    text-wrap: balance;
+  }
+
+  .artwork__caption {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: var(--space-2);
+  }
+
+  .artwork__title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+  }
+
+  .artwork__details {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+</style>
