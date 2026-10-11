@@ -42,7 +42,6 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
         method="POST"
         data-netlify="true"
         netlify-honeypot="bot-field"
-        novalidate
         data-contact-form
         data-sending={f.sending}
       >
@@ -368,6 +367,9 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
 
   if (form) {
+    // The script validates and shows its own messages; without JavaScript the
+    // browser's built-in validation of the required fields still applies.
+    form.noValidate = true;
     const success = document.querySelector<HTMLElement>('[data-form-success]');
     const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
     const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
