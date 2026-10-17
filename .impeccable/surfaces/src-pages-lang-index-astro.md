@@ -11,9 +11,9 @@ Whole site (5 pages × EN/ES). Mode: Persuade (DJ bookings first, classes second
 
 ## Direction contract
 
-THESIS: A milonga at night: one artist's world lit low, photographs carrying the atmosphere, Playfair setting his name like a programme. Refuses the dance-school template (icon cards, stock dancers, gold flourishes).
+THESIS: A milonga at night: one artist's world lit low, photographs carrying the atmosphere, Bodoni Moda setting his name like a programme. Refuses the dance-school template (icon cards, stock dancers, gold flourishes).
 
-OWN-WORLD: Obsidian ground, Warm Ivory type, Muted Gold for the primary action per section plus small accents (the title hairline, labels, active states), per diseno.md "primary buttons, highlights, fine borders, small accents"; never two gold fills competing in one view, Burgundy only as a low stage light behind the closing band, Charcoal for dividers. Playfair Display for names/titles, Montserrat for everything else. Square-ish 3px corners, 1px rules, no cards except service panels.
+OWN-WORLD: Obsidian ground, Warm Ivory type, Muted Gold for the primary action per section plus small accents (the title hairline, labels, active states), per diseno.md "primary buttons, highlights, fine borders, small accents"; never two gold fills competing in one view, Burgundy only as a low stage light behind the closing band, Charcoal for dividers. Bodoni Moda for names/titles, Jost for everything else. Square-ish 3px corners, 1px rules, no cards except service panels.
 
 STORY: (Updated 2026-10-17, tango-centred, DJ-led.) Visitor meets Aaron as a tango DJ from Buenos Aires based in Berlin, sees the formats and the real venues he has played, books him (CTA opens the form with "dj" preselected) or goes to the full DJ profile; classes are the second, quieter path; the paintings are only a discreet link.
 

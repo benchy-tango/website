@@ -9,6 +9,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import ContactCTA from '../../components/ContactCTA.astro';
+import VinylSleeve from '../../components/VinylSleeve.astro';
 import { DJ_HIGHLIGHTS } from '../../data/dj';
 import { enquiryUrl, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
 import djPhoto from '../../assets/photos/aaron-dj.jpg';
@@ -40,10 +41,10 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
     <div class="container hero__content">
       <h1 class="hero__name" translate="no">{t.meta.siteName}</h1>
       <span class="hero__line" aria-hidden="true"></span>
-      <p class="label hero__subtitle">{h.hero.label}</p>
+      <p class="hero__subtitle">{h.hero.label}</p>
       <p class="hero__text">{h.hero.text}</p>
       <div class="button-row hero__actions">
-        <Button href={enquiryUrl(language, 'dj')} arrow>{t.common.bookDj}</Button>
+        <Button href={enquiryUrl(language, 'dj')} disc>{t.common.bookDj}</Button>
         <Button href={pageUrl(language, 'dj')} variant="secondary">{h.hero.secondaryCta}</Button>
       </div>
     </div>
@@ -68,7 +69,7 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
             ))
           }
         </ol>
-        <Button href={enquiryUrl(language, 'dj')} arrow>{t.common.bookDj}</Button>
+        <Button href={enquiryUrl(language, 'dj')} disc>{t.common.bookDj}</Button>
       </div>
     </div>
   </section>
@@ -102,7 +103,7 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
       <div class="classes__body" data-reveal>
         <h2 id="classes-title">{h.classes.title}</h2>
         <p class="lead">{h.classes.text}</p>
-        <Button href={enquiryUrl(language, 'classes')} variant="secondary" arrow>{h.classes.cta}</Button>
+        <Button href={enquiryUrl(language, 'classes')} variant="secondary" disc>{h.classes.cta}</Button>
       </div>
       <div class="classes__photo" data-reveal-image>
         <!-- The source photo is 496px wide: never shown larger than that -->
@@ -114,9 +115,9 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
   <!-- ABOUT: from Buenos Aires to Berlin; the paintings only as a quiet link -->
   <section class="section" aria-labelledby="about-title">
     <div class="container about-teaser">
-      <div class="about-teaser__photo" data-reveal-image>
-        <Image src={portraitPhoto} alt={h.about.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 40vw, 100vw" loading="lazy" />
-      </div>
+      <VinylSleeve class="about-teaser__sleeve">
+        <Image src={portraitPhoto} alt={h.about.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 32vw, 78vw" loading="lazy" />
+      </VinylSleeve>
       <div class="about-teaser__body" data-reveal>
         <h2 id="about-title">{h.about.title}</h2>
         <p class="lead">{h.about.text}</p>
@@ -208,8 +209,12 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
     transform-origin: left;
   }
 
+  /* The credit line of a record sleeve: "by Aaron Benchimol" */
   .hero__subtitle {
     margin-bottom: var(--space-2);
+    font-size: var(--text-lead);
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
   }
 
   .hero__text {
@@ -419,17 +424,12 @@ const cityText = (city: string | Record<Language, string>) => (typeof city === '
     align-items: center;
   }
 
-  .about-teaser__photo {
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    max-width: 30rem;
+  .about-teaser :global(.about-teaser__sleeve) {
+    max-width: 34rem;
   }
 
-  .about-teaser__photo :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 40% 30%;
+  .about-teaser :global(.about-teaser__sleeve img) {
+    object-position: 40% 22%;
   }
 
   .about-teaser__body {

@@ -38,7 +38,7 @@ const d = t.classes;
     <div class="container class-hero__content">
       <h1 class="hairline-title">{d.title}</h1>
       <p class="lead class-hero__text">{d.intro}</p>
-      <Button href={enquiryUrl(language, 'classes')} arrow>{d.offer.cta}</Button>
+      <Button href={enquiryUrl(language, 'classes')} disc>{d.offer.cta}</Button>
     </div>
   </section>
 
@@ -55,7 +55,7 @@ const d = t.classes;
         <ul class="programme-list">
           {d.offer.formats.map((format) => <li>{format}</li>)}
         </ul>
-        <Button href={enquiryUrl(language, 'classes')} variant="secondary" arrow>{d.offer.cta}</Button>
+        <Button href={enquiryUrl(language, 'classes')} variant="secondary" disc>{d.offer.cta}</Button>
       </div>
     </div>
   </section>

@@ -7,7 +7,7 @@ import type english from './en';
 const spanish: typeof english = {
   meta: {
     siteName: 'Benchy Tango',
-    descriptor: 'Tango DJ · Bailarín y profesor de tango argentino',
+    descriptor: 'Tango DJ, bailarín y profesor de tango argentino',
   },
   navigation: {
     home: 'Inicio',
@@ -39,7 +39,7 @@ const spanish: typeof english = {
     filter: 'Filtrar por país',
     filterRegion: 'Filtrar por continente',
     all: 'Todos los países',
-    summary: '{countries} países · {entries} experiencias',
+    summary: '{entries} experiencias en {countries} países',
     showing: 'Mostrando {n} experiencias',
     entry: 'experiencia',
     entries: 'experiencias',
@@ -68,7 +68,7 @@ const spanish: typeof english = {
     description:
       'Aaron Benchimol, DJ de tango argentino de Buenos Aires afincado en Berlín: milongas tradicionales, noches 50/50, festivales y maratones. También clases y talleres de tango.',
     hero: {
-      label: 'Aaron Benchimol · Tango DJ · Bailarín · Profesor',
+      label: 'por Aaron Benchimol',
       text: 'DJ de tango nacido en Buenos Aires y afincado en Berlín. Música para el abrazo: tandas de la Época de Oro, noches 50/50 y maratones de festival.',
       secondaryCta: 'Ver Perfil de DJ',
       photoAlt: 'Aaron Benchimol de esmoquin, sonriendo mientras escucha con sus auriculares de DJ',
@@ -91,7 +91,7 @@ const spanish: typeof english = {
       title: 'De Buenos Aires a Berlín',
       text: 'Crecí bailando en las milongas de Buenos Aires y hoy vivo en Berlín. El tango es mi vida: lo bailo, lo enseño y lo pongo en la cabina.',
       cta: 'Leer Mi Historia',
-      artLink: 'También pinto · Ver mis pinturas',
+      artLink: 'También pinto: ver mis pinturas',
       photoAlt: 'Retrato de Aaron Benchimol apoyado en una columna de piedra',
     },
     final: {
@@ -132,6 +132,13 @@ const spanish: typeof english = {
     repertoire: {
       title: 'La Época de Oro',
       text: 'En las milongas tradicionales construyo las tandas alrededor de las grandes orquestas de los años 30 y 40.',
+    },
+    journey: {
+      title: 'El viaje',
+      text: 'De Buenos Aires a Berlín: cada país donde pinché, en el orden en que llegué. Haz scroll y sigue la ruta.',
+      onMap: 'Verlo en el mapa',
+      today: 'Hoy',
+      home: 'Berlín, mi base',
     },
     experience: {
       title: 'Dónde he pinchado',
@@ -234,10 +241,13 @@ const spanish: typeof english = {
         name: 'Escribe tu nombre.',
         email: 'Escribe un email válido.',
         message: 'Escribe un mensaje corto.',
+        privacy: 'Confirma que has leído la política de privacidad.',
       },
       privacy:
         'Tu mensaje se envía a través de Netlify, que se lo reenvía a Aaron por email. Tus datos solo se usan para responderte.',
-      privacyLink: 'Política de privacidad',
+      consentStart: 'He leído la',
+      consentLink: 'política de privacidad',
+      consentEnd: 'y acepto que se usen mis datos para responder a mi consulta.',
     },
     direct: {
       title: 'Otras Formas de Contacto',

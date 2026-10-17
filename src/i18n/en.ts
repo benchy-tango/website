@@ -7,7 +7,7 @@ const english = {
   meta: {
     /** The brand: logo, page titles, og:site_name. Aaron's own name stays in the copy. */
     siteName: 'Benchy Tango',
-    descriptor: 'Tango DJ · Argentine Tango Dancer & Teacher',
+    descriptor: 'Tango DJ, Argentine tango dancer and teacher',
   },
   navigation: {
     home: 'Home',
@@ -40,7 +40,7 @@ const english = {
     filter: 'Filter by country',
     filterRegion: 'Filter by continent',
     all: 'All Countries',
-    summary: '{countries} countries · {entries} entries',
+    summary: '{entries} entries in {countries} countries',
     showing: 'Showing {n} entries',
     entry: 'entry',
     entries: 'entries',
@@ -69,7 +69,7 @@ const english = {
     description:
       'Aaron Benchimol, Argentine tango DJ from Buenos Aires based in Berlin: traditional milongas, 50/50 nights, festivals and marathons. Also tango classes and workshops.',
     hero: {
-      label: 'Aaron Benchimol · Tango DJ · Dancer · Teacher',
+      label: 'by Aaron Benchimol',
       text: 'Tango DJ from Buenos Aires, based in Berlin. Music for the embrace: Golden Age tandas, 50/50 nights and festival marathons.',
       secondaryCta: 'Discover the DJ Profile',
       photoAlt: 'Aaron Benchimol in a tuxedo, smiling as he listens through his DJ headphones',
@@ -92,7 +92,7 @@ const english = {
       title: 'From Buenos Aires to Berlin',
       text: 'I grew up dancing in the milongas of Buenos Aires and today I live in Berlin. Tango is my life: I dance it, I teach it and I bring it to the booth.',
       cta: 'Read My Story',
-      artLink: 'I also paint · See my paintings',
+      artLink: 'I also paint: see my paintings',
       photoAlt: 'Portrait of Aaron Benchimol leaning against a stone column',
     },
     final: {
@@ -133,6 +133,13 @@ const english = {
     repertoire: {
       title: 'The Golden Age',
       text: 'At traditional milongas I build my tandas around the great orchestras of the 1930s and 1940s.',
+    },
+    journey: {
+      title: 'The Journey',
+      text: 'From Buenos Aires to Berlin: every country where I’ve played, in the order I first played there. Scroll and follow the route.',
+      onMap: 'See it on the map',
+      today: 'Today',
+      home: 'Berlin, home base',
     },
     experience: {
       title: 'Where I’ve Played',
@@ -235,10 +242,13 @@ const english = {
         name: 'Please enter your name.',
         email: 'Please enter a valid email address.',
         message: 'Please write a short message.',
+        privacy: 'Please confirm that you have read the privacy policy.',
       },
       privacy:
         'Your message is sent through Netlify, which forwards it to Aaron by email. Your details are only used to answer you.',
-      privacyLink: 'Privacy policy',
+      consentStart: 'I have read the',
+      consentLink: 'privacy policy',
+      consentEnd: 'and agree that my details are used to answer my enquiry.',
     },
     direct: {
       title: 'Other Ways to Reach Me',

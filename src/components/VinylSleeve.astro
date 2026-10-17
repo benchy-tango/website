@@ -1,0 +1,103 @@
+---
+/**
+ * A photo presented as a record sleeve: a square cover with a vinyl record
+ * tucked behind it. When the sleeve scrolls into view the record slides
+ * out to the right (data-reveal adds .is-visible) far enough to show its
+ * burgundy label; on hover it turns.
+ * The record is pure CSS (grooves from a repeating radial gradient, a
+ * burgundy label), so it costs no image.
+ *
+ * Without JavaScript or with reduced motion the record simply rests half
+ * out, still.
+ */
+interface Props {
+  /** Extra class for sizing from the page */
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<figure class:list={['sleeve', className]} data-reveal>
+  <span class="sleeve__record" aria-hidden="true">
+    <span class="sleeve__disc"></span>
+  </span>
+  <div class="sleeve__cover">
+    <slot />
+  </div>
+</figure>
+
+<style>
+  /* The cover takes 68% of the width; the record slides into the 32% on the right */
+  .sleeve {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding-right: 32%;
+  }
+
+  .sleeve__cover {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .sleeve__cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Positioned box for the record: same height as the cover, square */
+  .sleeve__record {
+    position: absolute;
+    top: 3%;
+    left: 0;
+    width: 64%; /* 94% of the cover, which is 68% of the sleeve */
+    aspect-ratio: 1;
+    transform: translateX(55%);
+  }
+
+  .sleeve__disc {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Spindle hole, burgundy label with a gold ring, light sheen, grooves */
+    background:
+      radial-gradient(circle closest-side, var(--color-bg) 0 3%, transparent 3.5%),
+      radial-gradient(circle closest-side, var(--color-burgundy) 0 30%, var(--color-accent) 30.5% 31.5%, transparent 32%),
+      conic-gradient(from 20deg, transparent 0 8%, rgba(245, 239, 223, 0.09) 14%, transparent 22% 58%, rgba(245, 239, 223, 0.07) 64%, transparent 72%),
+      repeating-radial-gradient(circle closest-side, #141414 0 3px, #262626 3.5px 4px, #141414 4.5px 6px),
+      #141414;
+    box-shadow: 0 0 0 1px rgba(245, 239, 223, 0.1);
+  }
+
+  /* With JS and motion allowed: the record waits inside the sleeve, then slides out */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .sleeve__record {
+      transform: translateX(6%);
+      transition: transform 900ms var(--ease-out) 150ms;
+    }
+
+    :global(.js) .sleeve.is-visible .sleeve__record {
+      transform: translateX(55%);
+    }
+  }
+
+  /* Hover: the record turns slowly (constant motion: linear) */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .sleeve:hover .sleeve__disc {
+      animation: record-spin 2.4s linear infinite;
+    }
+  }
+
+  @keyframes record-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

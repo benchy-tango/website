@@ -1,0 +1,391 @@
+---
+/**
+ * The journey: every country where Aaron has DJed, in the order he first
+ * played there (from src/data/experience.ts), ending at home in Berlin.
+ * A plane flies along a curved route that follows the reader's scroll,
+ * drawing the line behind it; each stop lights up as the plane reaches it.
+ * Each stop links to the map below, already filtered by that country.
+ *
+ * Without JavaScript: the stops are a plain list, all visible.
+ * With reduced motion: the whole route is drawn, the plane rests at the
+ * end, nothing moves.
+ */
+import { experiencesFor, textIn, type Experience } from '../data/experience';
+import { LANGUAGE_DETAILS, getTranslation, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+}
+
+const { language } = Astro.props;
+const t = getTranslation(language);
+const j = t.dj.journey;
+const countryName = new Intl.DisplayNames([LANGUAGE_DETAILS[language].htmlLang], { type: 'region' });
+
+// First DJ entry per country, oldest first (source order breaks ties)
+const sortKey = (e: Experience) => (e.years ? e.years.from - (e.years.before ? 0.5 : 0) : 9999);
+const djEntries = experiencesFor('dj').filter((e) => e.country);
+const firsts = new Map<string, { entry: Experience; count: number }>();
+for (const entry of [...djEntries].sort((a, b) => sortKey(a) - sortKey(b))) {
+  const code = entry.country as string;
+  const known = firsts.get(code);
+  if (known) known.count += 1;
+  else firsts.set(code, { entry, count: 1 });
+}
+const stops = [...firsts.entries()].map(([code, { entry, count }]) => ({
+  code,
+  count,
+  year: entry.years ? (entry.years.before ? `– ${entry.years.from}` : String(entry.years.from)) : '',
+  place: [entry.city ? textIn(entry.city, language) : null, countryName.of(code.toUpperCase())].filter(Boolean).join(', '),
+  event: textIn(entry.event, language),
+  proper: typeof entry.event === 'string',
+}));
+---
+
+<section class="section journey" id="journey" aria-labelledby="journey-title" data-journey>
+  <div class="container">
+    <div class="journey__head" data-reveal>
+      <h2 id="journey-title">{j.title}</h2>
+      <p class="lead">{j.text}</p>
+    </div>
+
+    <div class="journey__route" data-route>
+      <svg class="journey__svg" aria-hidden="true" focusable="false" data-svg>
+        <path class="journey__trail" data-trail></path>
+        <path class="journey__progress" data-progress></path>
+        <g class="journey__plane" data-plane>
+          <path
+            d="M12 1.5c.8 0 1.4.9 1.4 2.1v5.2l7.6 4.6v2.1l-7.6-2.3v4.6l2.2 1.7v1.7L12 20.2l-3.6 1v-1.7l2.2-1.7v-4.6L3 15.5v-2.1l7.6-4.6V3.6c0-1.2.6-2.1 1.4-2.1Z"
+          ></path>
+        </g>
+      </svg>
+
+      <ol class="journey__stops">
+        {
+          stops.map((stop, index) => (
+            <li class:list={['journey__stop', index % 2 ? 'journey__stop--right' : 'journey__stop--left']} data-stop>
+              <span class="journey__dot" data-dot aria-hidden="true" />
+              <div class="journey__card">
+                <p class="journey__year">{stop.year}</p>
+                <p class="journey__place">
+                  <img src={`/flags/${stop.code}.webp`} width="20" height="15" alt="" loading="lazy" decoding="async" />
+                  <span>{stop.place}</span>
+                </p>
+                <p class="journey__event" translate={stop.proper ? 'no' : undefined}>
+                  {stop.event}
+                </p>
+                <a class="journey__link" href={`?country=${stop.code}#experience-dj`}>
+                  {j.onMap} ({stop.count})
+                </a>
+              </div>
+            </li>
+          ))
+        }
+        <li class:list={['journey__stop', 'journey__stop--home', stops.length % 2 ? 'journey__stop--right' : 'journey__stop--left']} data-stop>
+          <span class="journey__dot" data-dot aria-hidden="true" />
+          <div class="journey__card">
+            <p class="journey__year">{j.today}</p>
+            <p class="journey__place">
+              <img src="/flags/de.webp" width="20" height="15" alt="" loading="lazy" decoding="async" />
+              <span>{j.home}</span>
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .journey {
+    border-top: 1px solid var(--color-border-soft);
+    overflow: hidden;
+  }
+
+  .journey__head {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 42rem;
+  }
+
+  .journey__route {
+    position: relative;
+    margin-top: var(--space-6);
+  }
+
+  .journey__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .journey__trail {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 7;
+    stroke-linecap: round;
+  }
+
+  .journey__progress {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .journey__plane {
+    fill: var(--color-text);
+  }
+
+  /* Without JavaScript there is no route to draw: the plane stays hidden */
+  :global(html:not(.js)) .journey__svg {
+    display: none;
+  }
+
+  .journey__stops {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Phones: dots zigzag gently along the left edge, cards to their right */
+  .journey__stop {
+    position: relative;
+    padding: 0 0 var(--space-5) 3.75rem;
+  }
+
+  .journey__dot {
+    position: absolute;
+    top: 0.45rem;
+    left: 0.4rem;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background: var(--color-bg);
+    transition:
+      background-color 300ms ease,
+      transform 300ms var(--ease-out);
+  }
+
+  .journey__stop--right .journey__dot {
+    left: 1.6rem;
+  }
+
+  .journey__card {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .journey__year {
+    font-family: var(--font-display);
+    font-size: var(--text-card);
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-accent);
+  }
+
+  .journey__place {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .journey__place img {
+    width: 20px;
+    height: 15px;
+    flex: none;
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .journey__event {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .journey__link {
+    justify-self: start;
+    padding-block: 0.35rem;
+    font-size: var(--text-small);
+    color: var(--color-text);
+    text-decoration-color: var(--color-accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .journey__link:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  /* Home: the last stop, a filled gold dot */
+  .journey__stop--home {
+    padding-bottom: 0;
+  }
+
+  .journey__stop--home .journey__dot {
+    background: var(--color-accent);
+  }
+
+  .journey__stop--home .journey__place {
+    font-family: var(--font-display);
+    font-size: var(--text-card);
+    font-weight: 400;
+  }
+
+  /* Wide screens: cards alternate left and right of a winding centre line */
+  @media (min-width: 760px) {
+    .journey__stop {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0 0 var(--space-5);
+    }
+
+    .journey__stop--left .journey__card {
+      grid-column: 1;
+      padding-right: 7rem;
+      text-align: right;
+      justify-items: end;
+    }
+
+    .journey__stop--left .journey__place {
+      flex-direction: row-reverse;
+    }
+
+    .journey__stop--right .journey__card {
+      grid-column: 2;
+      padding-left: 7rem;
+    }
+
+    .journey__stop--left .journey__dot {
+      left: calc(50% - 4rem);
+    }
+
+    .journey__stop--right .journey__dot {
+      left: calc(50% + 3rem);
+    }
+
+    .journey__stop--left .journey__link {
+      justify-self: end;
+    }
+  }
+
+  /* With JS and motion allowed: stops wait until the plane arrives */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .journey__card {
+      opacity: 0.25;
+      transform: translateY(10px);
+      transition:
+        opacity 450ms var(--ease-out),
+        transform 450ms var(--ease-out);
+    }
+
+    :global(.js) .is-reached .journey__card {
+      opacity: 1;
+      transform: none;
+    }
+
+    :global(.js) .journey__stop:not(.is-reached) .journey__dot {
+      transform: scale(0.7);
+    }
+  }
+
+  /* A reached stop: burgundy at the centre of the gold ring, like a record label */
+  .is-reached .journey__dot {
+    background: var(--color-burgundy);
+  }
+
+  .journey__stop--home.is-reached .journey__dot {
+    background: var(--color-accent);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-journey]').forEach((root) => {
+    const route = root.querySelector<HTMLElement>('[data-route]');
+    const svg = root.querySelector<SVGSVGElement>('[data-svg]');
+    const trail = root.querySelector<SVGPathElement>('[data-trail]');
+    const progress = root.querySelector<SVGPathElement>('[data-progress]');
+    const plane = root.querySelector<SVGGElement>('[data-plane]');
+    const stops = Array.from(root.querySelectorAll<HTMLElement>('[data-stop]'));
+    if (!route || !svg || !trail || !progress || !plane || stops.length < 2) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let points: [number, number][] = [];
+    let total = 0;
+    let stopLengths: number[] = [];
+    let frame = 0;
+
+    // Length along the path where it reaches a given height (the route only goes down)
+    const lengthAtY = (y: number) => {
+      let low = 0;
+      let high = total;
+      for (let i = 0; i < 24; i += 1) {
+        const mid = (low + high) / 2;
+        if (progress.getPointAtLength(mid).y < y) low = mid;
+        else high = mid;
+      }
+      return (low + high) / 2;
+    };
+
+    // Measure the dots and draw a smooth curve through them
+    const layout = () => {
+      const box = route.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
+      points = stops.map((stop) => {
+        const dot = stop.querySelector<HTMLElement>('[data-dot]')!.getBoundingClientRect();
+        return [dot.left - box.left + dot.width / 2, dot.top - box.top + dot.height / 2];
+      });
+      let d = `M${points[0][0]} ${points[0][1]}`;
+      for (let i = 1; i < points.length; i += 1) {
+        const [x0, y0] = points[i - 1];
+        const [x1, y1] = points[i];
+        const bend = (y1 - y0) / 2;
+        d += ` C${x0} ${y0 + bend} ${x1} ${y1 - bend} ${x1} ${y1}`;
+      }
+      trail.setAttribute('d', d);
+      progress.setAttribute('d', d);
+      total = progress.getTotalLength();
+      progress.style.strokeDasharray = `${total}`;
+      stopLengths = points.map(([, y]) => lengthAtY(y));
+      update();
+    };
+
+    // Place the plane where the reader is: the route point level with 60% of the viewport
+    const update = () => {
+      frame = 0;
+      if (!total) return;
+      let length = total;
+      if (!reduce.matches) {
+        const box = route.getBoundingClientRect();
+        const y = window.innerHeight * 0.6 - box.top;
+        const first = points[0][1];
+        const last = points[points.length - 1][1];
+        length = y <= first ? 0 : y >= last ? total : lengthAtY(y);
+      }
+      progress.style.strokeDashoffset = `${total - length}`;
+      const here = progress.getPointAtLength(length);
+      const ahead = progress.getPointAtLength(Math.min(total, length + 1));
+      const behind = progress.getPointAtLength(Math.max(0, length - 1));
+      const angle = (Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180) / Math.PI + 90;
+      plane.setAttribute('transform', `translate(${here.x} ${here.y}) rotate(${angle}) translate(-12 -12)`);
+      stops.forEach((stop, index) => stop.classList.toggle('is-reached', length >= stopLengths[index] - 2));
+    };
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    layout();
+    new ResizeObserver(layout).observe(route);
+    window.addEventListener('scroll', schedule, { passive: true });
+    reduce.addEventListener('change', update);
+    document.fonts?.ready.then(layout);
+  });
+</script>

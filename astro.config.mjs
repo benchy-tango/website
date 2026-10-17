@@ -12,8 +12,8 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Playfair Display',
-      cssVariable: '--font-playfair',
+      name: 'Bodoni Moda',
+      cssVariable: '--font-bodoni',
       weights: [400, 500],
       styles: ['normal'],
       subsets: ['latin', 'latin-ext'],
@@ -21,8 +21,8 @@ export default defineConfig({
     },
     {
       provider: fontProviders.google(),
-      name: 'Montserrat',
-      cssVariable: '--font-montserrat',
+      name: 'Jost',
+      cssVariable: '--font-jost',
       weights: [400, 500, 600],
       styles: ['normal'],
       subsets: ['latin', 'latin-ext'],

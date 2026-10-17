@@ -2,7 +2,8 @@
 /**
  * TANGO DJ (the main business): intro + booking CTA → "From the dance floor
  * to the booth" (DJ portrait, approach) → formats → the Golden Age
- * orchestras → where he has played (map + country filter) → booking band.
+ * orchestras (as an LP tracklist) → the journey (plane on a scroll-linked
+ * route) → where he has played (map + country filter) → booking band.
  * Facts from ../wesite-info/tango-dj.md and aaron_benchimol_dj-history.md. Every booking CTA
  * opens the contact form with "dj" already chosen.
  */
@@ -10,8 +11,10 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import PageIntro from '../../components/PageIntro.astro';
+import VinylSleeve from '../../components/VinylSleeve.astro';
 import ContactCTA from '../../components/ContactCTA.astro';
 import ExperienceMap from '../../components/ExperienceMap.astro';
+import DjJourney from '../../components/DjJourney.astro';
 import { GOLDEN_AGE_ORCHESTRAS } from '../../data/dj';
 import { enquiryUrl, getTranslation, languageStaticPaths, type Language } from '../../i18n/languages';
 import djPhoto from '../../assets/photos/aaron-dj.jpg';
@@ -25,15 +28,15 @@ const d = t.dj;
 
 <BaseLayout language={language} page="dj" title={d.title} description={d.description}>
   <PageIntro title={d.title} text={d.intro}>
-    <Button href={enquiryUrl(language, 'dj')} arrow>{t.common.bookDj}</Button>
+    <Button href={enquiryUrl(language, 'dj')} disc>{t.common.bookDj}</Button>
   </PageIntro>
 
   <!-- FROM THE DANCE FLOOR TO THE BOOTH -->
   <section class="section origin" aria-labelledby="origin-title">
     <div class="container origin__grid">
-      <div class="origin__photo" data-reveal-image>
-        <Image src={djPhoto} alt={d.origin.photoAlt} widths={[480, 800, 1200]} sizes="(min-width: 960px) 42vw, 100vw" loading="lazy" />
-      </div>
+      <VinylSleeve class="origin__sleeve">
+        <Image src={djPhoto} alt={d.origin.photoAlt} widths={[480, 800, 1200]} sizes="(min-width: 960px) 34vw, 78vw" loading="lazy" />
+      </VinylSleeve>
       <div class="origin__body" data-reveal>
         <h2 id="origin-title">{d.origin.title}</h2>
         <p class="lead">{d.origin.text}</p>
@@ -67,11 +70,21 @@ const d = t.dj;
     <div class="container container--narrow repertoire__inner" data-reveal>
       <h2 id="repertoire-title">{d.repertoire.title}</h2>
       <p class="lead">{d.repertoire.text}</p>
-      <ul class="repertoire__orchestras" translate="no">
-        {GOLDEN_AGE_ORCHESTRAS.map((orchestra) => <li>{orchestra}</li>)}
-      </ul>
+      <!-- Set like the back of an LP: two columns of names between fine rules -->
+      <ol class="tracklist" translate="no">
+        {
+          GOLDEN_AGE_ORCHESTRAS.map((orchestra) => (
+            <li class="tracklist__track">
+              <span class="tracklist__name">{orchestra}</span>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
+
+  <!-- THE JOURNEY: a plane follows the scroll from Buenos Aires to Berlin -->
+  <DjJourney language={language} />
 
   <!-- WHERE I'VE PLAYED: map with a country filter (src/data/experience.ts) -->
   <ExperienceMap language={language} tag="dj" title={d.experience.title} text={d.experience.text} />
@@ -91,18 +104,12 @@ const d = t.dj;
     align-items: center;
   }
 
-  .origin__photo {
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    max-width: 34rem;
-    background: var(--color-surface);
+  .origin__grid :global(.origin__sleeve) {
+    max-width: 36rem;
   }
 
-  .origin__photo :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 55% 30%;
+  .origin__grid :global(.origin__sleeve img) {
+    object-position: 55% 22%;
   }
 
   .origin__body {
@@ -162,34 +169,38 @@ const d = t.dj;
     gap: var(--space-3);
   }
 
-  .repertoire__orchestras {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-1) var(--space-3);
+  /* Tracklist: two columns (side A, side B) on wider screens, one on phones */
+  .tracklist {
+    display: grid;
+    gap: 0 var(--space-6);
+    width: 100%;
+    max-width: 40rem;
     margin: var(--space-3) 0 0;
     padding: 0;
     list-style: none;
+    text-align: left;
+  }
+
+  .tracklist__track {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .tracklist__name {
     font-family: var(--font-display);
     font-size: var(--text-card);
-    line-height: 1.3;
+    line-height: 1.25;
     color: var(--color-text);
   }
 
-  /* Phones: one orchestra per line */
-  @media (max-width: 639px) {
-    .repertoire__orchestras {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-
-  /* Wider screens: a small gold dot between names, like a printed milonga poster */
   @media (min-width: 640px) {
-    .repertoire__orchestras li + li::before {
-      content: '·';
-      margin-right: var(--space-3);
-      color: var(--color-accent);
+    .tracklist {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: column;
+      grid-template-rows: repeat(3, auto);
     }
   }
 </style>

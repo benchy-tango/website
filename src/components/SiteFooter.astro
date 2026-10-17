@@ -32,14 +32,7 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
     <div class="site-footer__brand">
       <p class="site-footer__name" translate="no">{t.meta.siteName}</p>
       <p class="site-footer__descriptor">
-        {
-          t.meta.descriptor.split(' · ').map((part, index) => (
-            <>
-              {index > 0 && ' · '}
-              <span class="site-footer__descriptor-part">{part}</span>
-            </>
-          ))
-        }
+        {t.meta.descriptor}
       </p>
     </div>
 
@@ -141,11 +134,6 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
   .site-footer__descriptor {
     margin-top: var(--space-1);
     max-width: 24em;
-  }
-
-  /* Each role stays on one line; the line breaks only between roles */
-  .site-footer__descriptor-part {
-    white-space: nowrap;
   }
 
   .site-footer__list,

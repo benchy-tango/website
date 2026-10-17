@@ -9,6 +9,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import ExperienceMap from '../../components/ExperienceMap.astro';
+import VinylSleeve from '../../components/VinylSleeve.astro';
 import { TANGO_TEACHERS, TRAINING } from '../../data/training';
 import { LANGUAGE_DETAILS, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
 import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
@@ -25,13 +26,13 @@ const dateFormat = new Intl.DateTimeFormat(LANGUAGE_DETAILS[language].htmlLang, 
 <BaseLayout language={language} page="about" title={a.title} description={a.description}>
   <section class="story">
     <div class="container story__grid">
-      <div class="story__photo" data-reveal-image>
-        <Image src={portraitPhoto} alt={a.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 42vw, 100vw" loading="eager" />
-      </div>
+      <VinylSleeve class="story__sleeve">
+        <Image src={portraitPhoto} alt={a.photoAlt} widths={[480, 800, 1048]} sizes="(min-width: 960px) 34vw, 78vw" loading="eager" />
+      </VinylSleeve>
       <div class="story__body">
         <h1 class="hairline-title">{a.title}</h1>
         <p class="lead">{a.text}</p>
-        <Button href={pageUrl(language, 'contact')} arrow>{a.cta}</Button>
+        <Button href={pageUrl(language, 'contact')} disc>{a.cta}</Button>
       </div>
     </div>
   </section>
@@ -101,18 +102,12 @@ const dateFormat = new Intl.DateTimeFormat(LANGUAGE_DETAILS[language].htmlLang, 
     align-items: center;
   }
 
-  .story__photo {
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    max-width: 34rem;
-    background: var(--color-surface);
+  .story__grid :global(.story__sleeve) {
+    max-width: 36rem;
   }
 
-  .story__photo :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 40% 30%;
+  .story__grid :global(.story__sleeve img) {
+    object-position: 40% 22%;
   }
 
   .story__body {

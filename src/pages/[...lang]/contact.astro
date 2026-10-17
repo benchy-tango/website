@@ -84,9 +84,18 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
           <p id="cf-message-error" class="field__error" data-error aria-live="polite" hidden>{f.errors.message}</p>
         </div>
 
-        <p class="contact-form__privacy">
-          {f.privacy} <a href={pageUrl(language, 'privacy')}>{f.privacyLink}</a>.
-        </p>
+        <p class="contact-form__privacy">{f.privacy}</p>
+
+        <!-- Required: the visitor confirms having read the privacy policy -->
+        <div class="field field--check">
+          <label class="check" for="cf-privacy">
+            <input id="cf-privacy" name="privacy" type="checkbox" value="accepted" required aria-describedby="cf-privacy-error" />
+            <span>
+              {f.consentStart} <a href={pageUrl(language, 'privacy')} target="_blank" rel="noopener">{f.consentLink}</a> {f.consentEnd}
+            </span>
+          </label>
+          <p id="cf-privacy-error" class="field__error" data-error aria-live="polite" hidden>{f.errors.privacy}</p>
+        </div>
 
         <button type="submit" class="button button--primary" data-submit>{f.submit}</button>
 
@@ -268,9 +277,35 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
     max-width: 40em;
   }
 
-  .contact-form__privacy a {
+  /* Consent checkbox: the whole line is the hit target */
+  .check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding-block: 0.25rem;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .check input {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.1rem 0 0;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  .check a {
     color: var(--color-text);
     text-decoration-color: var(--color-accent);
+  }
+
+  .check input[aria-invalid='true'] {
+    outline: 1px solid var(--color-error-line);
+    outline-offset: 2px;
   }
 
   .contact-form [data-submit] {
@@ -389,6 +424,7 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
     const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
     const select = form.querySelector<HTMLSelectElement>('[data-enquiry-select]');
     const required = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'));
+    // The consent checkbox counts as valid only when ticked
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Service CTAs link here with ?enquiry=dj (or classes, art…): preselect it.
@@ -396,10 +432,14 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
     if (select && enquiry && Array.from(select.options).some((option) => option.value === enquiry)) select.value = enquiry;
 
     const isValid = (field: HTMLInputElement | HTMLTextAreaElement) =>
-      field.type === 'email' ? emailPattern.test(field.value.trim()) : field.value.trim() !== '';
+      field instanceof HTMLInputElement && field.type === 'checkbox'
+        ? field.checked
+        : field.type === 'email'
+          ? emailPattern.test(field.value.trim())
+          : field.value.trim() !== '';
 
     const showState = (field: HTMLInputElement | HTMLTextAreaElement, valid: boolean) => {
-      const error = field.parentElement?.querySelector<HTMLElement>('[data-error]');
+      const error = field.closest('.field')?.querySelector<HTMLElement>('[data-error]');
       if (error) error.hidden = valid;
       if (valid) field.removeAttribute('aria-invalid');
       else field.setAttribute('aria-invalid', 'true');

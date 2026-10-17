@@ -16,46 +16,46 @@ colors:
   error-line: "rgba(217, 138, 145, 0.6)"
 typography:
   display:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Bodoni Moda, Georgia, serif"
     fontSize: "clamp(3rem, 1.6rem + 6vw, 5.5rem)"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "-0.015em"
   headline:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Bodoni Moda, Georgia, serif"
     fontSize: "clamp(2.5rem, 1.7rem + 3.4vw, 4rem)"
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: "-0.01em"
   title:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Bodoni Moda, Georgia, serif"
     fontSize: "clamp(1.875rem, 1.5rem + 1.6vw, 2.5rem)"
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: "-0.01em"
   title-card:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Bodoni Moda, Georgia, serif"
     fontSize: "clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem)"
     fontWeight: 400
     lineHeight: 1.2
     letterSpacing: "-0.01em"
   lead:
-    fontFamily: "Montserrat, Arial, sans-serif"
+    fontFamily: "Jost, Arial, sans-serif"
     fontSize: "clamp(1.0625rem, 1rem + 0.35vw, 1.25rem)"
     fontWeight: 400
     lineHeight: 1.7
   body:
-    fontFamily: "Montserrat, Arial, sans-serif"
+    fontFamily: "Jost, Arial, sans-serif"
     fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)"
     fontWeight: 400
     lineHeight: 1.65
   label:
-    fontFamily: "Montserrat, Arial, sans-serif"
+    fontFamily: "Jost, Arial, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 500
     letterSpacing: "0.18em"
   action:
-    fontFamily: "Montserrat, Arial, sans-serif"
+    fontFamily: "Jost, Arial, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 500
     letterSpacing: "0.08em"
@@ -123,7 +123,7 @@ components:
 
 **Creative North Star: "The Milonga at Night"**
 
-One artist's world, lit low. The page is an obsidian room; Warm Ivory type sits in it like programme text under stage light, and photographs carry the atmosphere. Playfair Display sets his name and every title the way a printed milonga programme would; Montserrat does all the quiet work underneath. Gold is not decoration but the one lit object in each view: the primary action, the fine hairline under a title, a label, an active state.
+One artist's world, lit low. The page is an obsidian room; Warm Ivory type sits in it like programme text under stage light, and photographs carry the atmosphere. Bodoni Moda sets his name and every title the way a printed milonga programme would; Jost does all the quiet work underneath. Gold is not decoration but the one lit object in each view: the primary action, the fine hairline under a title, a label, an active state.
 
 Density is editorial and generous: tall fluid section padding, large full-bleed or 4:5 photographs, asymmetric two-column splits (7fr/5fr, 5fr/6fr) instead of card rows. Everything is flat. Depth comes from photography graded dark where type must read, from a single burgundy stage-light glow behind the closing band, and from 1px ivory rules at low opacity.
 
@@ -131,7 +131,7 @@ The world refuses the dance-school template: no icon-card grids, no stock dancer
 
 **Key Characteristics:**
 - Obsidian ground, Warm Ivory type, Muted Gold as the single lit accent per view.
-- Playfair Display at weight 400 for names and titles; Montserrat for everything else.
+- Bodoni Moda at weight 400 for names and titles; Jost for everything else.
 - Near-square 3px corners, 1px hairline rules, no shadows.
 - Photographs as the atmosphere: full-bleed with directional dark grading, or 4:5 portrait frames.
 - Signature motion: the gold compás hairline draws once from left to right; photographs open with a clip-path curtain.
@@ -162,8 +162,8 @@ A night palette: near-black ground, warm paper-ivory type, one muted metallic ac
 
 ## Typography
 
-**Display Font:** Playfair Display (with Georgia, serif)
-**Body Font:** Montserrat (with Arial, sans-serif)
+**Display Font:** Bodoni Moda (with Georgia, serif)
+**Body Font:** Jost (with Arial, sans-serif)
 
 **Character:** A high-contrast transitional serif set at regular weight, like a programme or gallery card, over a clean geometric sans that carries labels, actions, and copy without competing.
 
@@ -180,7 +180,7 @@ A night palette: near-black ground, warm paper-ivory type, one muted metallic ac
 Headings use balanced wrapping; paragraphs use pretty wrapping.
 
 ### Named Rules
-**The Programme Rule.** Playfair is for names and titles only, always at weight 400; never bold, never for UI or labels.
+**The Programme Rule.** Bodoni Moda is for names and titles only, always at weight 400; never bold, never for UI or labels.
 
 **The Label Below Rule.** Letter-spaced labels are metadata and descriptors; they sit beside or beneath what they describe, never as a kicker above a heading.
 
@@ -188,7 +188,7 @@ Headings use balanced wrapping; paragraphs use pretty wrapping.
 
 A single 1240px container (760px narrow variant) with a fluid gutter (20 to 40px). Sections breathe with fluid vertical padding (72 to 128px). Spacing follows an 8px rhythm (0.5rem to 8rem).
 
-Compositions are asymmetric two-column splits at 960px and up (7fr/5fr for photo-led offers, 5fr/6fr for portrait-and-story), alternating sides with a mirrored variant. The home hero sets the DJ portrait as a tall pane on the right 58% of wide screens, melting into obsidian on its left edge (the dark studio backdrop hides the seam); on phones it fills the screen under a tall bottom grade. Full-bleed photo moments (the dance floor at 88svh) anchor their type lower-left with a bottom-and-left dark grade. Venue lists and DJ history are set as programme rows: Playfair names, letter-spaced city labels, 1px rules.
+Compositions are asymmetric two-column splits at 960px and up (7fr/5fr for photo-led offers, 5fr/6fr for portrait-and-story), alternating sides with a mirrored variant. The home hero sets the DJ portrait as a tall pane on the right 58% of wide screens, melting into obsidian on its left edge (the dark studio backdrop hides the seam); on phones it fills the screen under a tall bottom grade. Full-bleed photo moments (the dance floor at 88svh) anchor their type lower-left with a bottom-and-left dark grade. Venue lists and DJ history are set as programme rows: Bodoni Moda names, letter-spaced city labels, 1px rules.
 
 Galleries hang salon-style in CSS columns: two columns on phones, three from 960px, works of mixed aspect ratios stacking without gaps. The fixed header is 4.5rem tall; inner pages open with the title below it plus 6rem.
 
@@ -218,17 +218,17 @@ Restrained and confident: a small, letter-spaced uppercase label in a near-squar
 - **Text link:** gold uppercase action type with a 1px underline resting at 35% width that draws to full width on hover.
 
 ### Cards / Containers
-There are no generic cards. Service and offer panels are a photograph above or beside a heading, text, and one action, with no border, background, or radius. Artwork entries are a clipped frame on Night Surface with a Playfair title and muted details caption below; images scale to 1.025 on hover over 700ms. Placeholder frames are a transparent panel with a 1px Ivory Rule outline and a centred gold label, so they never pass as real work.
+There are no generic cards. Service and offer panels are a photograph above or beside a heading, text, and one action, with no border, background, or radius. Artwork entries are a clipped frame on Night Surface with a Bodoni Moda title and muted details caption below; images scale to 1.025 on hover over 700ms. Placeholder frames are a transparent panel with a 1px Ivory Rule outline and a centred gold label, so they never pass as real work.
 
 ### Inputs / Fields
-- **Style:** Night Surface fill, 1px Ivory Rule border, 3px corners, min-height 3rem, 16px text, gold caret. Labels sit above in 14px Montserrat 500.
+- **Style:** Night Surface fill, 1px Ivory Rule border, 3px corners, min-height 3rem, 16px text, gold caret. Labels sit above in 14px Jost 500.
 - **Focus:** border turns gold plus the global 2px gold outline at offset.
 - **Error:** Error Line border with Error Rose message text; form status boxes use a 1px Error Line or gold border.
 
 ### Navigation
-- **Desktop (960px and up):** Playfair wordmark left; uppercase Montserrat links in Ivory Muted at 13px/0.06em, turning ivory on hover with a gold 1px underline drawn from the left; the current page holds the underline. Contact is an ivory-outline 2.5rem block. EN/ES switch sits behind a 1px rule, active language in gold.
+- **Desktop (960px and up):** Bodoni Moda wordmark left; uppercase Jost links in Ivory Muted at 13px/0.06em, turning ivory on hover with a gold 1px underline drawn from the left; the current page holds the underline. Contact is an ivory-outline 2.5rem block. EN/ES switch sits behind a 1px rule, active language in gold.
 - **Header:** fixed, 92% obsidian with a soft bottom rule; transparent over full-bleed hero photography until scroll.
-- **Mobile:** a full-screen obsidian dialog with links set in Playfair at 32 to 44px, current page in gold, staggered rise-in (45ms per link); language switch at the foot behind a rule.
+- **Mobile:** a full-screen obsidian dialog with links set in Bodoni Moda at 32 to 44px, current page in gold, staggered rise-in (45ms per link); language switch at the foot behind a rule.
 
 ### Title Hairline (signature)
 Every page title carries a 1px gold line beneath it (4.5rem wide; up to 18rem under the hero name), drawn once from left to right over 900ms on the in-out curve after the page opens. It is the brand's one recurring motif, the 2x4 beat of the compás.
@@ -240,7 +240,7 @@ A centred band under a soft top rule, obsidian with the burgundy stage-light glo
 
 ### Do:
 - **Do** give each section one gold primary action and pair it, if needed, with an ivory-outline secondary.
-- **Do** set names and titles in Playfair Display 400 with the gold hairline under page titles.
+- **Do** set names and titles in Bodoni Moda 400 with the gold hairline under page titles.
 - **Do** let photographs carry atmosphere: full-bleed with dark grading only where type sits, or clipped 4:5 and 4:3 frames.
 - **Do** separate with 1px ivory rules at 12 to 22% opacity and tonal steps to Night Surface.
 - **Do** keep motion short and singular: reveals of 18px rise over 560ms, the clip-path curtain on photographs, and nothing at all under reduced motion.

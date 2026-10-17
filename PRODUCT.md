@@ -40,7 +40,7 @@ Argentine tango DJ (TDJ) from Buenos Aires, based in Berlin, who also dances and
 
 The brand is **Benchy Tango** (logo, home hero, site name, favicon "BT"); Aaron Benchimol is the person behind it and stays in the copy, the hero label and the copyright.
 
-`../wesite-info/diseno.md` (visual system) and `../wesite-info/marca.md` (identity, voice, CTAs) are binding; they replace the former `brand-benchy.md`. Palette: Obsidian Black, Warm Ivory, Muted Gold, Burgundy, Charcoal Grey. Playfair Display + Montserrat. Gold primary buttons, outline secondary buttons. Voice: "confident but not boastful, artistic but clear", tango vocabulary used naturally.
+`../wesite-info/diseno.md` (visual system) and `../wesite-info/marca.md` (identity, voice, CTAs) are binding; they replace the former `brand-benchy.md`. Palette: Obsidian Black, Warm Ivory, Muted Gold, Burgundy, Charcoal Grey. Bodoni Moda + Jost. Gold primary buttons, outline secondary buttons. Voice: "confident but not boastful, artistic but clear", tango vocabulary used naturally.
 
 ## Evidence on Hand
 

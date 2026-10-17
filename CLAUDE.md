@@ -55,7 +55,7 @@ Igual que en `../../_plantilla-web/CLAUDE.md`. Cada decisión tiene una sola ski
 ## 1. Stack y comandos
 
 - **Astro 7** (salida estática), CSS propio, sin Tailwind ni frameworks UI. Única dependencia: `astro` (incluye `sharp` para imágenes).
-- Fuentes **Playfair Display** (400, 500) y **Montserrat** (400, 500, 600) con la Fonts API de Astro (`astro.config.mjs`): se descargan al compilar y se sirven desde la propia web.
+- Fuentes **Bodoni Moda** (400, 500) y **Jost** (400, 500, 600) con la Fonts API de Astro (`astro.config.mjs`): se descargan al compilar y se sirven desde la propia web.
 - Despliegue: **Netlify** (`netlify.toml`: build `npm run build`, publica `dist/`, Node 22). Repo: `https://github.com/benchy-tango/website.git`.
 
 ```
@@ -122,18 +122,18 @@ public/maps/world-land.svg # tierra Natural Earth 110m (dominio público), equir
 
 **Marca: Benchy Tango** (`meta.siteName` en `en.ts` / `es.ts`): logo del header, menú móvil, footer, título del hero de la Home, títulos de pestaña y `og:site_name`; favicon "BT". El nombre de Aaron va en la etiqueta del hero, en el copy, el copyright y el JSON-LD (`Person` con `alternateName: Benchy Tango`).
 
-Menú: **Tango DJ · Classes · About · Contact** (Contact con contorno marfil) + EN/ES. **Arte no está en el menú** (decisión 2026-10-17, "por ahora"): solo en el footer y como enlace discreto en Home y About. Para volver a ponerlo, añadir `{ page: 'art', label: t.art }` a `links` en `SiteHeader.astro`. El nombre "Aaron Benchimol" (Playfair) lleva a Home. Descriptor: "Tango DJ · Argentine Tango Dancer & Teacher".
+Menú: **Tango DJ · Classes · About · Contact** (Contact con contorno marfil) + EN/ES. **Arte no está en el menú** (decisión 2026-10-17, "por ahora"): solo en el footer y como enlace discreto en Home y About. Para volver a ponerlo, añadir `{ page: 'art', label: t.art }` a `links` en `SiteHeader.astro`. El nombre "Aaron Benchimol" (Bodoni Moda) lleva a Home. Descriptor: "Tango DJ · Argentine Tango Dancer & Teacher".
 
 ### Home `/`
 1. **Hero** con el retrato de DJ (`aaron-dj.jpg`). En escritorio la foto ocupa el 58% derecho y se funde con la obsidiana (`--shade-hero-pane`; el fondo de estudio oscuro hace invisible la costura); en móvil llena la pantalla con `--shade-hero-tall` para que el texto no quede sobre la camisa blanca. Nombre grande, línea dorada, etiqueta "Tango DJ · Dancer · Teacher", texto. CTAs: oro "Book Aaron as a DJ" → form `dj`; contorno "Discover the DJ Profile" → `/dj/`.
 2. **Music for the Dance Floor**: sin foto. Título y texto a la izquierda; los 3 formatos (título + descripción) entre líneas finas y CTA oro a la derecha.
-3. **Where I’ve Played**: 8 lugares de `DJ_HIGHLIGHTS` (Playfair + bandera + ciudad) y enlace "See All Countries" a `/dj/#experience-dj`.
+3. **Where I’ve Played**: 8 lugares de `DJ_HIGHLIGHTS` (Bodoni Moda + bandera + ciudad) y enlace "See All Countries" a `/dj/#experience-dj`.
 4. **Tango Classes & Workshops** (banda `--color-surface`, más discreta): texto + CTA **contorno** "Enquire About Classes" (sin oro: el DJ manda) + foto de clase grupal (`aaron-class.jpg`, máx. 31rem: el original mide 496 px).
 5. **From Buenos Aires to Berlin**: retrato + texto + "Read My Story" + enlace discreto "I also paint · See my paintings" → `/art/`.
 6. **Banda final**: "Bring the music to your milonga" → "Book Aaron as a DJ".
 
 ### Tango DJ `/dj/`
-PageIntro "Tango DJ" + CTA oro → **From the dance floor to the booth** (retrato DJ, filosofía, "How I play" en lista tipo programa) → **Formats** (`#formats`: milongas tradicionales, neo y 50/50, maratones y festivales, en 3 columnas entre líneas finas) → **The Golden Age** (banda surface, orquestas en Playfair separadas por punto dorado; en móvil una por línea) → **Where I’ve Played** (`#experience-dj`, `ExperienceMap` con `tag="dj"`) → banda final "Book Aaron for your event".
+PageIntro "Tango DJ" + CTA oro → **From the dance floor to the booth** (retrato DJ, filosofía, "How I play" en lista tipo programa) → **Formats** (`#formats`: milongas tradicionales, neo y 50/50, maratones y festivales, en 3 columnas entre líneas finas) → **The Golden Age** (banda surface, orquestas en Bodoni Moda separadas por punto dorado; en móvil una por línea) → **Where I’ve Played** (`#experience-dj`, `ExperienceMap` con `tag="dj"`) → banda final "Book Aaron for your event".
 
 ### Classes `/classes/`
 **Hero** con `aaron-professor.jpg` (retrato con esmoquin; Aaron a la izquierda, título y CTA oro sobre el lado oscuro derecho con `--shade-hero-right`; en móvil texto abajo con `--shade-hero-tall`; header transparente) → **Learn to Dance Tango** (foto de clase grupal `aaron-class.jpg` a su tamaño real, formatos, CTA contorno → form `classes`) → **Where I’ve Taught** (`ExperienceMap` con `tag="teacher"`) → banda final "Ready to dance?" → form `classes`.
@@ -171,7 +171,7 @@ Círculo verde fijo abajo a la derecha en **todas las páginas** (petición del 
 
 ## 7. Sistema de diseño (resumen; fuente de verdad `../wesite-info/diseno.md`)
 
-**Concepto:** "milonga de noche": fondo obsidiana, fotos con carácter, el nombre en Playfair como un programa; nada de plantilla de escuela de baile.
+**Concepto:** "milonga de noche": fondo obsidiana, fotos con carácter, el nombre en Bodoni Moda como un programa; nada de plantilla de escuela de baile.
 
 **Colores** (`tokens.css`, nunca hex en componentes):
 
@@ -195,7 +195,7 @@ Excepción: `<meta name="theme-color">` lleva `#0b0b0b` literal (el navegador no
 
 Nunca dos rellenos dorados compitiendo en la misma vista (por eso el "Contact" del header es contorno marfil).
 
-**Tipografía:** Playfair Display Regular para nombre, títulos y citas; Montserrat para todo lo demás. Escala fluida en tokens (`--text-hero` 48→88px, `--text-page` 40→64px, `--text-section` 30→40px, `--text-card` 22→28px, cuerpo 16–17px, interlineado 1.65). Etiquetas en mayúsculas espaciadas solo para metadatos, **nunca encima de un título**.
+**Tipografía:** Bodoni Moda Regular para nombre, títulos y citas; Jost para todo lo demás. Escala fluida en tokens (`--text-hero` 48→88px, `--text-page` 40→64px, `--text-section` 30→40px, `--text-card` 22→28px, cuerpo 16–17px, interlineado 1.65). Etiquetas en mayúsculas espaciadas solo para metadatos, **nunca encima de un título**.
 
 **Botones:** primario oro con texto negro; secundario contorno marfil 45% → oro al pasar el ratón; radio 3px (sin píldoras); `:active` escala 0.97. En pantallas ≤480px se reduce el espaciado para que los CTAs largos en español quepan en una línea.
 
@@ -251,6 +251,12 @@ Revisado el 2026-10-17 sobre lo que hace realmente el sitio: **sin cookies, sin 
 Ver **0b** para qué skill decide qué. Herramientas: Impeccable (contexto: `.claude/skills/impeccable/scripts/impeccable context`; detector: `impeccable detect --json src/...`); ui-ux-pro-max sin Python instalado (solo su referencia rápida). Capturas de revisión en `.impeccable/review/` (no se suben a git). Para capturas de página completa con los revelados visibles: Playwright vía `npx -p playwright` con `channel: 'msedge'` y `reducedMotion: 'reduce'`, recorriendo la página antes para que carguen las imágenes `lazy`.
 
 ## 11. Registro de cambios
+
+- **2026-10-17** — **Estética de DJ y vinilo, bordó como tercer color.** Sin subtítulos con puntos (·): la etiqueta del hero es ahora un crédito de disco ("by Aaron Benchimol"), descriptor y resumen del mapa en frase normal, eventos unidos con guion. Bordó (`--color-burgundy`) como tercer color de marca (regla nueva en `diseno.md`): etiqueta del vinilo, relleno de botones secundarios, paradas del viaje. Botones: suben 2 px y crecen 3 % al pasar el ratón; el secundario se rellena de bordó; el icono es un **vinilo** que gira (prop `disc` en `Button.astro`, sustituye a la flecha). **`VinylSleeve.astro`**: fotos como portada de disco con el vinilo que sale al aparecer y gira al pasar el ratón (DJ, Sobre mí, Home). Época de Oro como **lista de temas de un LP** en dos columnas (sin numeración A1–B2, a petición del cliente). **`DjJourney.astro`** en la página DJ: un avión recorre al hacer scroll una ruta curva por los países donde pinchó (primer año en cada uno, desde `experience.ts`) hasta Berlín; cada parada enlaza al mapa filtrado. **Contacto**: casilla obligatoria de aceptación de la política de privacidad (campo `privacy` en Netlify). Movimiento reducido: todo estático y visible.
+
+- **2026-10-17** — **Fuente de texto: Jost** (sustituye a Montserrat, demasiado vista en webs genéricas; elegida con `ui-ux-pro-max` y aprobada por el cliente). Heredera de Futura: con Bodoni Moda forma la pareja clásica de los carteles y programas de los años 30. Pesos 400/500/600, autoalojada.
+
+- **2026-10-17** — **Fuente de marca y títulos: Bodoni Moda** (sustituye a Playfair Display; elegida con `ui-ux-pro-max` y aprobada por el cliente). Didone de alto contraste, como las partituras y carteles de tango de la Época de Oro. Jost sigue para el texto. Cambiado en `diseno.md` (fuente de verdad), `astro.config.mjs`, `tokens.css`, `BaseLayout` y el favicon.
 
 - **2026-10-17** — Sección **Formación** en About (EN "Training", DE "Ausbildung"): UNTREF, CADEF, Centro Integral de Natación A-1459, formación continua en tango salón y escenario con sus maestros y formación complementaria. Datos en `src/data/training.ts`, fuente `../wesite-info/formacion.md`.
 

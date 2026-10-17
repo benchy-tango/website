@@ -18,7 +18,7 @@ export interface Training {
 export const TRAINING: Training[] = [
   {
     years: '2019 – 2022',
-    institution: 'UNTREF · Escuela de Tango y Danzas Tradicionales',
+    institution: 'UNTREF, Escuela de Tango y Danzas Tradicionales',
     title: {
       en: 'Tango diploma course focused on teaching',
       es: 'Diplomatura de Tango orientada a la docencia',

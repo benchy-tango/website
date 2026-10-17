@@ -7,7 +7,7 @@ import type english from './en';
 const german: typeof english = {
   meta: {
     siteName: 'Benchy Tango',
-    descriptor: 'Tango-DJ · Tänzer und Lehrer für argentinischen Tango',
+    descriptor: 'Tango-DJ, Tänzer und Lehrer für argentinischen Tango',
   },
   navigation: {
     home: 'Start',
@@ -39,7 +39,7 @@ const german: typeof english = {
     filter: 'Nach Land filtern',
     filterRegion: 'Nach Kontinent filtern',
     all: 'Alle Länder',
-    summary: '{countries} Länder · {entries} Stationen',
+    summary: '{entries} Stationen in {countries} Ländern',
     showing: '{n} Stationen werden angezeigt',
     entry: 'Station',
     entries: 'Stationen',
@@ -68,7 +68,7 @@ const german: typeof english = {
     description:
       'Aaron Benchimol, Tango-DJ aus Buenos Aires mit Sitz in Berlin: traditionelle Milongas, 50/50-Abende, Festivals und Marathons. Außerdem Tangounterricht und Workshops.',
     hero: {
-      label: 'Aaron Benchimol · Tango-DJ · Tänzer · Lehrer',
+      label: 'von Aaron Benchimol',
       text: 'Tango-DJ aus Buenos Aires, zu Hause in Berlin. Musik für die Umarmung: Tandas aus der Goldenen Ära, 50/50-Abende und Festival-Marathons.',
       secondaryCta: 'DJ-Profil ansehen',
       photoAlt: 'Aaron Benchimol im Smoking, lächelnd beim Hören über seine DJ-Kopfhörer',
@@ -91,7 +91,7 @@ const german: typeof english = {
       title: 'Von Buenos Aires nach Berlin',
       text: 'Ich bin in den Milongas von Buenos Aires mit dem Tanzen groß geworden und lebe heute in Berlin. Tango ist mein Leben: Ich tanze ihn, ich unterrichte ihn und ich bringe ihn ans DJ-Pult.',
       cta: 'Meine Geschichte',
-      artLink: 'Ich male auch · Meine Bilder ansehen',
+      artLink: 'Ich male auch: meine Bilder ansehen',
       photoAlt: 'Porträt von Aaron Benchimol, an eine Steinsäule gelehnt',
     },
     final: {
@@ -132,6 +132,13 @@ const german: typeof english = {
     repertoire: {
       title: 'Die Goldene Ära',
       text: 'Auf traditionellen Milongas baue ich meine Tandas um die großen Orchester der 1930er und 1940er Jahre.',
+    },
+    journey: {
+      title: 'Die Reise',
+      text: 'Von Buenos Aires nach Berlin: jedes Land, in dem ich aufgelegt habe, in der Reihenfolge meiner ersten Auftritte. Scroll und folge der Route.',
+      onMap: 'Auf der Karte ansehen',
+      today: 'Heute',
+      home: 'Berlin, mein Zuhause',
     },
     experience: {
       title: 'Wo ich aufgelegt habe',
@@ -233,10 +240,13 @@ const german: typeof english = {
         name: 'Bitte gib deinen Namen ein.',
         email: 'Bitte gib eine gültige E-Mail-Adresse ein.',
         message: 'Bitte schreib eine kurze Nachricht.',
+        privacy: 'Bitte bestätige, dass du die Datenschutzerklärung gelesen hast.',
       },
       privacy:
         'Deine Nachricht wird über Netlify gesendet und per E-Mail an Aaron weitergeleitet. Deine Daten werden nur verwendet, um dir zu antworten.',
-      privacyLink: 'Datenschutzerklärung',
+      consentStart: 'Ich habe die',
+      consentLink: 'Datenschutzerklärung',
+      consentEnd: 'gelesen und bin einverstanden, dass meine Daten zur Beantwortung meiner Anfrage verwendet werden.',
     },
     direct: {
       title: 'Weitere Kontaktwege',
