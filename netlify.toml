@@ -12,3 +12,15 @@
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# 2026-10-17: "Dance & Music" was split into Tango DJ (/dj/) and Classes
+# (/classes/). Old links land on the DJ page, the main business.
+[[redirects]]
+  from = "/dance-music/*"
+  to = "/dj/"
+  status = 301
+
+[[redirects]]
+  from = "/es/dance-music/*"
+  to = "/es/dj/"
+  status = 301

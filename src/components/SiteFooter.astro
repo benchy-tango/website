@@ -18,9 +18,10 @@ const year = new Date().getFullYear();
 
 const links: { page: PageName; label: string }[] = [
   { page: 'home', label: t.navigation.home },
-  { page: 'danceMusic', label: t.navigation.danceMusic },
-  { page: 'art', label: t.navigation.art },
+  { page: 'dj', label: t.navigation.dj },
+  { page: 'classes', label: t.navigation.classes },
   { page: 'about', label: t.navigation.about },
+  { page: 'art', label: t.navigation.art },
   { page: 'contact', label: t.navigation.contact },
 ];
 const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.common.instagramArt, facebook: 'Facebook' };
@@ -29,7 +30,7 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
 <footer class="site-footer">
   <div class="container site-footer__grid">
     <div class="site-footer__brand">
-      <p class="site-footer__name">Aaron Benchimol</p>
+      <p class="site-footer__name" translate="no">{t.meta.siteName}</p>
       <p class="site-footer__descriptor">
         {
           t.meta.descriptor.split(' · ').map((part, index) => (
@@ -98,6 +99,10 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
 
   <div class="container site-footer__bottom">
     <p>&copy; {year} Aaron Benchimol. {t.footer.rights}</p>
+    <ul class="site-footer__legal">
+      <li><a href={pageUrl(language, 'impressum')} aria-current={page === 'impressum' ? 'page' : undefined}>{t.footer.imprint}</a></li>
+      <li><a href={pageUrl(language, 'privacy')} aria-current={page === 'privacy' ? 'page' : undefined}>{t.footer.privacy}</a></li>
+    </ul>
     <p>
       {t.footer.madeBy}{' '}
       <a href="https://www.waterwerk-websolutions.nl" target="_blank" rel="noopener">Waterwerk Websolutions</a>
@@ -186,6 +191,15 @@ const socialLabels = { instagramTango: t.common.instagramTango, instagramArt: t.
     padding-block: var(--space-3) var(--space-4);
     border-top: 1px solid var(--color-border-soft);
     font-size: 0.8125rem;
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
   .site-footer__bottom a {

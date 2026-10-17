@@ -1,0 +1,189 @@
+---
+/**
+ * Body of a legal page (Impressum or privacy policy): a quiet reading
+ * column with numbered sections. Address, contact and VAT come from
+ * src/data/legal.ts; while the address is missing a clearly marked
+ * "pending" placeholder and a draft note appear, so it cannot go live
+ * unnoticed.
+ */
+import { LEGAL, LEGAL_INCOMPLETE } from '../data/legal';
+import type { LegalPageText, LegalTexts } from '../i18n/legal';
+import type { Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+  page: LegalPageText;
+  labels: LegalTexts['labels'];
+}
+
+const { language, page, labels } = Astro.props;
+// The VAT section only exists when there is a VAT ID
+const sections = page.sections.filter((section) => section.block !== 'vat' || LEGAL.vatId);
+---
+
+<article class="legal">
+  <div class="container container--narrow legal__inner">
+    <header class="legal__head">
+      <h1 class="hairline-title">{page.title}</h1>
+      <p class="legal__updated">{page.updated}</p>
+      {LEGAL_INCOMPLETE && <p class="legal__draft" role="note">{labels.pendingNote}</p>}
+    </header>
+
+    {
+      sections.map((section) => (
+        <section class="legal__section">
+          <h2>{section.heading}</h2>
+          {section.body?.map((paragraph) => <p>{paragraph}</p>)}
+
+          {section.block === 'address' && (
+            <address class="legal__block">
+              <span translate="no">{LEGAL.name}</span>
+              <span>{LEGAL.street || <mark class="legal__pending">{labels.pending}</mark>}</span>
+              <span>
+                {LEGAL.postalCode || <mark class="legal__pending">{labels.pending}</mark>} {LEGAL.city}
+              </span>
+              <span>{LEGAL.country[language]}</span>
+            </address>
+          )}
+
+          {section.block === 'contact' && (
+            <dl class="legal__block legal__contact">
+              <div>
+                <dt>{labels.email}</dt>
+                <dd>
+                  <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>
+                </dd>
+              </div>
+              <div>
+                <dt>{labels.phone}</dt>
+                <dd>
+                  <a href={`tel:${LEGAL.phone.replace(/\s/g, '')}`}>{LEGAL.phone}</a>
+                </dd>
+              </div>
+            </dl>
+          )}
+
+          {section.block === 'vat' && (
+            <p class="legal__block">
+              {labels.vat}: {LEGAL.vatId}
+            </p>
+          )}
+
+          {section.links && (
+            <ul class="legal__links">
+              {section.links.map((link) => (
+                <li>
+                  <a href={link.href} target="_blank" rel="noopener">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</article>
+
+<style>
+  .legal {
+    padding-block: calc(var(--header-height) + var(--space-7)) var(--section-y);
+  }
+
+  .legal__inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .legal__head {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .legal__updated {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .legal__draft {
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-error-line);
+    border-radius: var(--radius);
+    color: var(--color-error);
+    font-size: var(--text-small);
+  }
+
+  .legal__section {
+    display: grid;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .legal__section h2 {
+    font-size: var(--text-card);
+  }
+
+  .legal__section p {
+    max-width: 65ch;
+    color: var(--color-text-muted);
+  }
+
+  .legal__block {
+    display: grid;
+    gap: 0.15rem;
+    font-style: normal;
+    color: var(--color-text);
+  }
+
+  .legal__contact {
+    gap: var(--space-1);
+    margin: 0;
+  }
+
+  .legal__contact div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
+  }
+
+  .legal__contact dt {
+    min-width: 11rem;
+    color: var(--color-text-muted);
+  }
+
+  .legal__contact dd {
+    margin: 0;
+  }
+
+  .legal a {
+    color: var(--color-text);
+    text-decoration-color: var(--color-accent);
+    overflow-wrap: anywhere;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .legal a:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .legal__links {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+  }
+
+  /* Missing legal data: impossible to overlook */
+  .legal__pending {
+    padding: 0 0.35em;
+    border-radius: var(--radius);
+    background: var(--color-error-line);
+    color: var(--color-text);
+  }
+</style>

@@ -1,0 +1,16 @@
+---
+/** LEGAL NOTICE (Impressum, § 5 DDG): required for this site in Germany. Texts in src/i18n/legal.ts. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LegalPage from '../../components/LegalPage.astro';
+import { LEGAL_TEXTS } from '../../i18n/legal';
+import { languageStaticPaths, type Language } from '../../i18n/languages';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const legal = LEGAL_TEXTS[language];
+---
+
+<BaseLayout language={language} page="impressum" title={legal.imprint.title} description={legal.imprint.description}>
+  <LegalPage language={language} page={legal.imprint} labels={legal.labels} />
+</BaseLayout>

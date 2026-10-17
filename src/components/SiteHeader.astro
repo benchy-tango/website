@@ -17,19 +17,22 @@ interface Props {
 }
 
 const { language, page, overlay = false } = Astro.props;
-const t = getTranslation(language).navigation;
+const translation = getTranslation(language);
+const t = translation.navigation;
+const brand = translation.meta.siteName;
 
 const links: { page: PageName; label: string }[] = [
-  { page: 'danceMusic', label: t.danceMusic },
-  { page: 'art', label: t.art },
+  { page: 'dj', label: t.dj },
+  { page: 'classes', label: t.classes },
   { page: 'about', label: t.about },
+  // Art is left out of the header for now (tango focus): it stays in the footer.
 ];
 ---
 
 <header class="site-header" data-site-header data-overlay={overlay ? 'true' : 'false'} data-scrolled="false">
   <div class="container site-header__bar">
-    <a href={pageUrl(language, 'home')} class="wordmark" aria-current={page === 'home' ? 'page' : undefined}>
-      Aaron Benchimol
+    <a href={pageUrl(language, 'home')} class="wordmark" translate="no" aria-current={page === 'home' ? 'page' : undefined}>
+      {brand}
     </a>
 
     <nav class="site-nav" aria-label={t.mainLabel}>
@@ -77,7 +80,7 @@ const links: { page: PageName; label: string }[] = [
 
 <dialog id="mobile-menu" class="mobile-menu" aria-label={t.mainLabel} data-mobile-menu>
   <div class="container mobile-menu__top">
-    <a href={pageUrl(language, 'home')} class="wordmark">Aaron Benchimol</a>
+    <a href={pageUrl(language, 'home')} class="wordmark" translate="no">{brand}</a>
     <button type="button" class="menu-button" aria-label={t.closeMenu} data-close-menu>
       <Icon name="close" />
     </button>
@@ -211,6 +214,10 @@ const links: { page: PageName; label: string }[] = [
     .language-switch a:hover {
       color: var(--color-text);
     }
+
+    .menu-button:hover {
+      color: var(--color-accent);
+    }
   }
 
   /* Contact: clear but restrained emphasis (architecture §4) */
@@ -270,6 +277,8 @@ const links: { page: PageName; label: string }[] = [
     background: none;
     color: var(--color-text);
     cursor: pointer;
+    touch-action: manipulation;
+    transition: color var(--dur-micro) ease;
   }
 
   .menu-button :global(.icon) {
@@ -316,6 +325,7 @@ const links: { page: PageName; label: string }[] = [
     border: 0;
     background: var(--color-bg);
     color: var(--color-text);
+    overscroll-behavior: contain;
   }
 
   .mobile-menu[open] {

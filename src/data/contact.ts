@@ -3,7 +3,7 @@
  * here: an empty `url` hides that link everywhere on the site.
  */
 export const CONTACT = {
-  email: 'info@aaronbenchimol.com',
+  email: 'benchimol.fi@gmail.com',
   /** International format, digits only for wa.me links. */
   whatsappNumber: '491795299525',
   whatsappDisplay: '+49 179 5299525',

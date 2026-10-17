@@ -1,0 +1,164 @@
+---
+/**
+ * CLASSES: hero (studio portrait, text over the dark side) → Learn to Dance
+ * Tango (group class photo, formats, CTA) → where he has taught (map +
+ * country filter) → contact band. Every CTA opens the contact form with
+ * "classes" already chosen. (Formerly part of /dance-music/, which now
+ * redirects to /dj/.)
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import ExperienceMap from '../../components/ExperienceMap.astro';
+import { enquiryUrl, getTranslation, languageStaticPaths, type Language } from '../../i18n/languages';
+import professorPhoto from '../../assets/photos/aaron-professor.jpg';
+import classPhoto from '../../assets/photos/aaron-class.jpg';
+
+export const getStaticPaths = languageStaticPaths;
+
+const { language } = Astro.props as { language: Language };
+const t = getTranslation(language);
+const d = t.classes;
+---
+
+<BaseLayout language={language} page="classes" title={d.title} description={d.description} headerOverlay>
+  <!-- HERO: Aaron on the left of the portrait, the title on its dark right side -->
+  <section class="class-hero">
+    <Image
+      src={professorPhoto}
+      alt={d.heroPhotoAlt}
+      class="class-hero__photo"
+      widths={[640, 960, 1400, 1990]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="class-hero__shade" aria-hidden="true"></div>
+    <div class="container class-hero__content">
+      <h1 class="hairline-title">{d.title}</h1>
+      <p class="lead class-hero__text">{d.intro}</p>
+      <Button href={enquiryUrl(language, 'classes')} arrow>{d.offer.cta}</Button>
+    </div>
+  </section>
+
+  <!-- TANGO CLASSES -->
+  <section class="section offer" id="classes" aria-labelledby="classes-title">
+    <div class="container offer__grid">
+      <div class="offer__photo" data-reveal-image>
+        <!-- The source photo is 496px wide: never shown larger than that -->
+        <Image src={classPhoto} alt={d.offer.photoAlt} widths={[496]} sizes="(min-width: 600px) 496px, 100vw" loading="lazy" />
+      </div>
+      <div class="offer__body" data-reveal>
+        <h2 id="classes-title">{d.offer.title}</h2>
+        <p class="lead">{d.offer.text}</p>
+        <ul class="programme-list">
+          {d.offer.formats.map((format) => <li>{format}</li>)}
+        </ul>
+        <Button href={enquiryUrl(language, 'classes')} variant="secondary" arrow>{d.offer.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHERE I'VE TAUGHT: map with a country filter (src/data/experience.ts) -->
+  <ExperienceMap language={language} tag="teacher" title={d.experience.title} text={d.experience.text} />
+
+  <ContactCTA title={d.final.title} text={d.final.text} cta={d.final.cta} href={enquiryUrl(language, 'classes')} />
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .class-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: max(88svh, 36rem);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--color-bg);
+  }
+
+  .class-hero :global(.class-hero__photo) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 28% 20%;
+  }
+
+  /* Phones: the portrait fills the screen; the text sits low on a tall grade */
+  .class-hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--shade-hero-tall);
+  }
+
+  .class-hero__content {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-top: calc(var(--header-height) + var(--space-6));
+    padding-bottom: clamp(3rem, 2rem + 5vh, 6rem);
+  }
+
+  .class-hero__text {
+    color: var(--color-text);
+  }
+
+  /* Wide screens: Aaron stays on the left, the title moves onto the dark right half */
+  @media (min-width: 960px) {
+    .class-hero {
+      align-items: center;
+    }
+
+    .class-hero :global(.class-hero__photo) {
+      object-position: 0% 0%;
+    }
+
+    .class-hero__shade {
+      background: var(--shade-hero-right);
+    }
+
+    .class-hero__content {
+      padding-left: 52%;
+      padding-bottom: var(--space-6);
+    }
+  }
+
+  /* ---------- Learn to dance tango ---------- */
+  .offer__grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .offer__photo {
+    overflow: hidden;
+    width: 100%;
+    max-width: 31rem; /* the photo's own width: no upscaling */
+    aspect-ratio: 496 / 231;
+    background: var(--color-surface);
+  }
+
+  .offer__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .offer__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 960px) {
+    .offer__grid {
+      grid-template-columns: 6fr 5fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

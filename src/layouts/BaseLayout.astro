@@ -11,7 +11,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import { CONTACT, activeSocialAccounts } from '../data/contact';
 import { DEFAULT_LANGUAGE, LANGUAGES, LANGUAGE_DETAILS, getTranslation, pageUrl, type Language, type PageName } from '../i18n/languages';
-import shareImageSource from '../assets/photos/aaron-dancing.jpg';
+import shareImageSource from '../assets/photos/aaron-dj.jpg';
 
 interface Props {
   language: Language;
@@ -33,7 +33,8 @@ const site = Astro.site;
 const absolute = (path: string) => (site ? new URL(path, site).href : undefined);
 const canonicalUrl = absolute(pageUrl(language, page));
 
-const shareImage = await getImage({ src: shareImageSource, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+// The DJ portrait is vertical: crop from the top so the face and headphones stay in the frame.
+const shareImage = await getImage({ src: shareImageSource, width: 1200, height: 630, fit: 'cover', position: 'top', format: 'jpg' });
 const shareImageUrl = absolute(shareImage.src);
 
 // Structured data: only confirmed facts (name, role, contact, official accounts).
@@ -41,6 +42,7 @@ const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Aaron Benchimol',
+  alternateName: t.meta.siteName,
   jobTitle: t.meta.descriptor,
   email: `mailto:${CONTACT.email}`,
   ...(site ? { url: absolute(pageUrl(language, 'home')) } : {}),

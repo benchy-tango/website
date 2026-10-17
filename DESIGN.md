@@ -117,6 +117,8 @@ components:
 
 # Design System: Aaron Benchimol
 
+> Derived from the built code by Impeccable. The source of truth for the design system is `../wesite-info/diseno.md`; if this file disagrees, `diseno.md` wins. Since 2026-10-17 the site is tango-centred with the DJ as the lead.
+
 ## Overview
 
 **Creative North Star: "The Milonga at Night"**
@@ -146,7 +148,7 @@ A night palette: near-black ground, warm paper-ivory type, one muted metallic ac
 
 ### Neutral
 - **Obsidian Black** (obsidian-black): page, header, footer, mobile menu, and the text colour on gold.
-- **Night Surface** (night-surface): a barely lifted panel for the art-teaser band, form fields, and image frames before load.
+- **Night Surface** (night-surface): a barely lifted panel for the quieter bands (home classes, DJ repertoire), form fields, and image frames before load.
 - **Warm Ivory** (warm-ivory): headings, primary text, and hero copy over photographs.
 - **Ivory Muted** (ivory-muted): lead and body copy, captions, footer text, resting nav links.
 - **Charcoal Grey** (charcoal-grey): scrollbar thumb; the brand's divider tone.
@@ -186,7 +188,7 @@ Headings use balanced wrapping; paragraphs use pretty wrapping.
 
 A single 1240px container (760px narrow variant) with a fluid gutter (20 to 40px). Sections breathe with fluid vertical padding (72 to 128px). Spacing follows an 8px rhythm (0.5rem to 8rem).
 
-Compositions are asymmetric two-column splits at 960px and up (7fr/5fr for photo-led offers, 5fr/6fr for portrait-and-story), alternating sides with a mirrored variant. On home, the DJ panel drops 8rem below the classes panel so the two read as panels in conversation, not a card row. Full-bleed photo moments (hero at full viewport height, the dance floor at 88svh) anchor their type lower-left with a bottom-and-left dark grade.
+Compositions are asymmetric two-column splits at 960px and up (7fr/5fr for photo-led offers, 5fr/6fr for portrait-and-story), alternating sides with a mirrored variant. The home hero sets the DJ portrait as a tall pane on the right 58% of wide screens, melting into obsidian on its left edge (the dark studio backdrop hides the seam); on phones it fills the screen under a tall bottom grade. Full-bleed photo moments (the dance floor at 88svh) anchor their type lower-left with a bottom-and-left dark grade. Venue lists and DJ history are set as programme rows: Playfair names, letter-spaced city labels, 1px rules.
 
 Galleries hang salon-style in CSS columns: two columns on phones, three from 960px, works of mixed aspect ratios stacking without gaps. The fixed header is 4.5rem tall; inner pages open with the title below it plus 6rem.
 

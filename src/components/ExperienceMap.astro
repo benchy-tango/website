@@ -1,0 +1,621 @@
+---
+/**
+ * Experience by country: a world map plus a Europe detail (where most
+ * countries sit close together), with one coloured circle per country
+ * (size = number of entries, colour = region). Clicking a country circle
+ * or chip filters the list by country; clicking a continent circle in the
+ * legend filters by continent (and lights up its countries on the map).
+ * Clicking the active one again (or "All countries") clears the filter.
+ * The filter is kept in the URL (?country=de or ?region=europe) so a
+ * filtered view can be shared.
+ *
+ * Without JavaScript the map and the full list still show; only the
+ * filter controls stay inert.
+ *
+ * Land: Natural Earth 110m (public domain), public/maps/world-land.svg,
+ * equirectangular: x = lon + 180, y = 84 - lat. Flags: flag-icons (MIT),
+ * public/flags/<code>.webp.
+ */
+import { COUNTRIES, countriesIn, experiencesFor, textIn, type Experience, type Tag } from '../data/experience';
+import { LANGUAGE_DETAILS, getTranslation, type Language } from '../i18n/languages';
+
+interface Props {
+  language: Language;
+  tag: Tag;
+  title: string;
+  text: string;
+  /** Rows shown before "Show all" (with JavaScript) */
+  limit?: number;
+}
+
+const { language, tag, title, text, limit = 12 } = Astro.props;
+const t = getTranslation(language).experience;
+const entries = experiencesFor(tag);
+const countries = countriesIn(entries);
+const countryName = new Intl.DisplayNames([LANGUAGE_DETAILS[language].htmlLang], { type: 'region' });
+const nameOf = (code: string) => countryName.of(code.toUpperCase()) ?? code.toUpperCase();
+const sectionId = `experience-${tag}`;
+
+// Map frames in map units (see header). Europe holds everything between these bounds.
+const WORLD = { x: 0, y: 0, w: 360, h: 142 };
+const EUROPE = { x: 168, y: 13, w: 56, h: 42 };
+const inFrame = (frame: typeof WORLD, x: number, y: number) => x >= frame.x && x <= frame.x + frame.w && y >= frame.y && y <= frame.y + frame.h;
+const markersFor = (frame: typeof WORLD, exclude?: typeof WORLD) =>
+  countries
+    .map((country) => ({ ...country, x: country.lon + 180, y: 84 - country.lat }))
+    .filter((c) => inFrame(frame, c.x, c.y) && !(exclude && inFrame(exclude, c.x, c.y)))
+    .map((c) => ({
+      ...c,
+      left: ((c.x - frame.x) / frame.w) * 100,
+      top: ((c.y - frame.y) / frame.h) * 100,
+      size: Math.min(44, Math.round(12 + 5 * Math.sqrt(c.count))),
+    }));
+const worldMarkers = markersFor(WORLD, EUROPE);
+const europeMarkers = markersFor(EUROPE);
+// Continents on this page with their number of entries, most first
+const regions = [...new Set(countries.map((c) => c.region))]
+  .map((region) => ({ region, count: countries.filter((c) => c.region === region).reduce((sum, c) => sum + c.count, 0) }))
+  .sort((a, b) => b.count - a.count);
+
+const yearsText = (years: Experience['years']) => {
+  if (!years) return '';
+  // Open ranges without words: "– 2018" (before 2018), "2014 –" (since 2014)
+  if (years.before) return `– ${years.from}`;
+  if (years.to === 'now') return `${years.from} –`;
+  return years.to ? `${years.from} – ${years.to}` : String(years.from);
+};
+const countLabel = (count: number) => `${count} ${count === 1 ? t.entry : t.entries}`;
+const summary = t.summary.replace('{countries}', String(countries.length)).replace('{entries}', String(entries.length));
+---
+
+<section class="section xp" id={sectionId} aria-labelledby={`${sectionId}-title`} data-xp data-limit={limit} data-showing={t.showing}>
+  <div class="container">
+    <div class="xp__head" data-reveal>
+      <h2 id={`${sectionId}-title`}>{title}</h2>
+      <p class="lead">{text}</p>
+      <p class="label xp__summary">{summary}</p>
+    </div>
+
+    <!-- MAPS: world (without the European countries) + Europe detail -->
+    <div class="xp__maps" data-reveal>
+      <figure class="xp-map xp-map--world">
+        <div class="xp-map__frame" style={`aspect-ratio:${WORLD.w} / ${WORLD.h}`}>
+          <svg class="xp-map__land" viewBox={`${WORLD.x} ${WORLD.y} ${WORLD.w} ${WORLD.h}`} aria-hidden="true" focusable="false">
+            <use href="/maps/world-land.svg#land"></use>
+            <rect class="xp-map__europe-frame" x={EUROPE.x} y={EUROPE.y} width={EUROPE.w} height={EUROPE.h}></rect>
+          </svg>
+          {
+            worldMarkers.map((m) => (
+              <button
+                type="button"
+                class:list={['xp-marker', `xp-marker--${m.region}`, { 'xp-marker--small': m.size < 22 }]}
+                style={`left:${m.left}%;top:${m.top}%;--d:${m.size}px`}
+                data-country={m.code}
+                data-region={m.region}
+                aria-pressed="false"
+                aria-label={`${nameOf(m.code)}: ${countLabel(m.count)}`}
+                title={`${nameOf(m.code)} · ${countLabel(m.count)}`}
+              >
+                <span class="xp-marker__count" aria-hidden="true">{m.count}</span>
+              </button>
+            ))
+          }
+        </div>
+        <figcaption class="xp-map__caption">{t.world}</figcaption>
+      </figure>
+
+      <figure class="xp-map xp-map--europe">
+        <div class="xp-map__frame" style={`aspect-ratio:${EUROPE.w} / ${EUROPE.h}`}>
+          <svg class="xp-map__land" viewBox={`${EUROPE.x} ${EUROPE.y} ${EUROPE.w} ${EUROPE.h}`} aria-hidden="true" focusable="false">
+            <use href="/maps/world-land.svg#land"></use>
+          </svg>
+          {
+            europeMarkers.map((m) => (
+              <button
+                type="button"
+                class:list={['xp-marker', `xp-marker--${m.region}`, { 'xp-marker--small': m.size < 22 }]}
+                style={`left:${m.left}%;top:${m.top}%;--d:${m.size}px`}
+                data-country={m.code}
+                data-region={m.region}
+                aria-pressed="false"
+                aria-label={`${nameOf(m.code)}: ${countLabel(m.count)}`}
+                title={`${nameOf(m.code)} · ${countLabel(m.count)}`}
+              >
+                <span class="xp-marker__count" aria-hidden="true">{m.count}</span>
+              </button>
+            ))
+          }
+        </div>
+        <figcaption class="xp-map__caption">{t.europe}</figcaption>
+      </figure>
+    </div>
+
+    <!-- CONTINENTS: the colour legend doubles as a continent filter -->
+    <div class="xp__legend" role="group" aria-label={t.filterRegion}>
+      {
+        regions.map(({ region, count }) => (
+          <button type="button" class="xp-region" data-region={region} aria-pressed="false" aria-label={`${t.regions[region]}: ${countLabel(count)}`}>
+            <span class={`xp__legend-dot xp-marker--${region}`} aria-hidden="true"></span>
+            {t.regions[region]}
+            <span class="xp-chip__count" aria-hidden="true">{count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- COUNTRY CHIPS: the same filter as the map, in a list (and the easy target on phones) -->
+    <div class="xp__chips" role="group" aria-label={t.filter}>
+      <button type="button" class="xp-chip" data-country="" aria-pressed="true">{t.all}</button>
+      {
+        countries.map((c) => (
+          <button type="button" class="xp-chip" data-country={c.code} aria-pressed="false">
+            <img src={`/flags/${c.code}.webp`} width="20" height="15" alt="" loading="lazy" decoding="async" />
+            {nameOf(c.code)}
+            <span class="xp-chip__count">{c.count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <p class="visually-hidden" aria-live="polite" data-xp-status></p>
+
+    <!-- LIST -->
+    <ol class="xp__list">
+      {
+        entries.map((entry, index) => (
+          <li class="xp-row" data-country={entry.country ?? ''} data-region={entry.country ? COUNTRIES[entry.country].region : ''} data-index={index}>
+            <p class="xp-row__year">{yearsText(entry.years)}</p>
+            <div class="xp-row__main">
+              <p class="xp-row__event" translate={typeof entry.event === 'string' ? 'no' : undefined}>
+                {textIn(entry.event, language)}
+              </p>
+              <p class="xp-row__place">
+                {entry.country ? (
+                  <img src={`/flags/${entry.country}.webp`} width="20" height="15" alt="" loading="lazy" decoding="async" />
+                ) : null}
+                <span>{[entry.city ? textIn(entry.city, language) : null, entry.country ? nameOf(entry.country) : t.online].filter(Boolean).join(', ')}</span>
+              </p>
+            </div>
+            <p class="xp-row__role">{t.roles[entry.role]}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    {
+      entries.length > limit && (
+        <button type="button" class="button button--secondary xp__more" data-xp-more data-more={`${t.showAll} (${entries.length})`} data-less={t.showFewer} hidden>
+          {t.showAll} ({entries.length})
+        </button>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .xp {
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .xp__head {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 42rem;
+  }
+
+  .xp__summary {
+    margin-top: var(--space-1);
+  }
+
+  /* ---------- Maps ---------- */
+  .xp__maps {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  @media (min-width: 960px) {
+    .xp__maps {
+      grid-template-columns: 3fr 2fr;
+      align-items: end;
+      gap: var(--space-5);
+    }
+  }
+
+  .xp-map {
+    margin: 0;
+  }
+
+  .xp-map__frame {
+    position: relative;
+  }
+
+  .xp-map__land {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: var(--color-map-land);
+    overflow: hidden;
+  }
+
+  .xp-map__europe-frame {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-opacity: 0.55;
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .xp-map__caption {
+    margin-top: var(--space-1);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* One country: a coloured circle sized by its number of entries. The
+     button keeps a 28px hit area even when the circle is smaller. */
+  .xp-marker {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: max(var(--d), 28px);
+    height: max(var(--d), 28px);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--color-on-accent);
+    cursor: pointer;
+    translate: -50% -50%;
+    touch-action: manipulation;
+    transition: opacity var(--dur-micro) ease;
+  }
+
+  .xp-marker::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--d);
+    height: var(--d);
+    border-radius: 50%;
+    background: var(--marker);
+    box-shadow: 0 0 0 1px var(--color-bg);
+    translate: -50% -50%;
+    transition: transform var(--dur-micro) var(--ease-out);
+  }
+
+  .xp-marker__count {
+    position: relative;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  /* Small circles: the number would not fit, the tooltip and label carry it */
+  .xp-marker--small .xp-marker__count {
+    display: none;
+  }
+
+  .xp-marker--europe {
+    --marker: var(--color-map-europe);
+  }
+
+  .xp-marker--americas {
+    --marker: var(--color-map-americas);
+  }
+
+  .xp-marker--asia {
+    --marker: var(--color-map-asia);
+  }
+
+  .xp-marker[aria-pressed='true']::before {
+    box-shadow:
+      0 0 0 2px var(--color-bg),
+      0 0 0 3.5px var(--color-text);
+  }
+
+  /* While a country or continent is chosen, the circles outside it step back */
+  .xp-marker[data-dim] {
+    opacity: 0.3;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .xp-marker:hover::before {
+      transform: scale(1.15);
+    }
+
+    .xp-marker:hover {
+      opacity: 1;
+    }
+  }
+
+  /* ---------- Legend and chips ---------- */
+  .xp__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: var(--space-3) 0 0 -0.7rem;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  /* Continent buttons: the legend dot, the name and its count */
+  .xp-region {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 0.85rem 0 0.7rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      border-color var(--dur-micro) ease,
+      color var(--dur-micro) ease;
+  }
+
+  .xp-region .xp__legend-dot {
+    transition: transform var(--dur-micro) var(--ease-out);
+  }
+
+  .xp-region[aria-pressed='true'] {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+
+  .xp-region[aria-pressed='true'] .xp__legend-dot {
+    transform: scale(1.35);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .xp-region:hover {
+      color: var(--color-text);
+    }
+
+    .xp-region:hover .xp__legend-dot {
+      transform: scale(1.35);
+    }
+  }
+
+  .xp__legend-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--marker);
+  }
+
+  .xp__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: var(--space-4);
+  }
+
+  .xp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    font-size: var(--text-small);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      border-color var(--dur-micro) ease,
+      color var(--dur-micro) ease;
+  }
+
+  .xp-chip img {
+    width: 20px;
+    height: 15px;
+    flex: none;
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .xp-chip__count {
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-muted);
+  }
+
+  .xp-chip[aria-pressed='true'] {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .xp-chip:hover {
+      border-color: var(--color-outline);
+      color: var(--color-text);
+    }
+  }
+
+  /* Without JavaScript the filter cannot work: show only the map and the list */
+  :global(html:not(.js)) .xp__chips,
+  :global(html:not(.js)) .xp-marker,
+  :global(html:not(.js)) .xp-region {
+    pointer-events: none;
+  }
+
+  :global(html:not(.js)) .xp__chips {
+    display: none;
+  }
+
+  /* ---------- List: programme rows ---------- */
+  .xp__list {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Phones: year, event, place and role stacked; wider: three columns */
+  .xp-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem var(--space-3);
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .xp-row[hidden] {
+    display: none;
+  }
+
+  .xp-row__year {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-accent);
+  }
+
+  .xp-row__main {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .xp-row__event {
+    font-weight: 600;
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+  }
+
+  .xp-row__place {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .xp-row__place img {
+    width: 20px;
+    height: 15px;
+    flex: none;
+    margin-top: 0.2em;
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .xp-row__role {
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 760px) {
+    .xp-row {
+      grid-template-columns: 8rem minmax(0, 1fr) minmax(0, 14rem);
+      align-items: baseline;
+    }
+
+    .xp-row__role {
+      grid-column: 3;
+      text-align: right;
+    }
+  }
+
+  .xp__more {
+    margin-top: var(--space-4);
+  }
+
+  /* .button sets display, which would override the hidden attribute */
+  .xp__more[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-xp]').forEach((root) => {
+    const limit = Number(root.dataset.limit) || 12;
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.xp-row'));
+    const countryControls = Array.from(root.querySelectorAll<HTMLButtonElement>('button[data-country]'));
+    const markers = Array.from(root.querySelectorAll<HTMLButtonElement>('.xp-marker'));
+    const regionControls = Array.from(root.querySelectorAll<HTMLButtonElement>('.xp-region'));
+    const more = root.querySelector<HTMLButtonElement>('[data-xp-more]');
+    const status = root.querySelector<HTMLElement>('[data-xp-status]');
+    // One filter at a time: a country, a continent, or nothing
+    let country = '';
+    let region = '';
+    let expanded = false;
+
+    const matches = (el: HTMLElement) => (country ? el.dataset.country === country : region ? el.dataset.region === region : true);
+
+    const render = () => {
+      const filtered = Boolean(country || region);
+      let shown = 0;
+      rows.forEach((row, index) => {
+        const match = matches(row);
+        // The row limit only applies to the unfiltered list
+        row.hidden = !match || (!filtered && !expanded && index >= limit);
+        if (match) shown += 1;
+      });
+      // "All countries" is pressed only when nothing is filtered
+      countryControls.forEach((control) => control.setAttribute('aria-pressed', String(control.dataset.country ? control.dataset.country === country : !filtered)));
+      regionControls.forEach((control) => control.setAttribute('aria-pressed', String(control.dataset.region === region)));
+      markers.forEach((marker) => marker.toggleAttribute('data-dim', filtered && !matches(marker)));
+      if (more) {
+        more.hidden = filtered || rows.length <= limit;
+        more.textContent = expanded ? more.dataset.less ?? '' : more.dataset.more ?? '';
+      }
+      if (status) status.textContent = (root.dataset.showing ?? '').replace('{n}', String(shown));
+    };
+
+    const syncUrl = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('country');
+      url.searchParams.delete('region');
+      if (country) url.searchParams.set('country', country);
+      if (region) url.searchParams.set('region', region);
+      history.replaceState(null, '', url);
+    };
+
+    const chooseCountry = (code: string) => {
+      country = code === country ? '' : code;
+      region = '';
+      syncUrl();
+      render();
+    };
+
+    const chooseRegion = (code: string) => {
+      region = code === region ? '' : code;
+      country = '';
+      syncUrl();
+      render();
+    };
+
+    countryControls.forEach((control) => control.addEventListener('click', () => chooseCountry(control.dataset.country ?? '')));
+    regionControls.forEach((control) => control.addEventListener('click', () => chooseRegion(control.dataset.region ?? '')));
+    more?.addEventListener('click', () => {
+      expanded = !expanded;
+      render();
+    });
+
+    // A shared link (?country=xx or ?region=europe) opens already filtered, if it exists on this page
+    const params = new URLSearchParams(window.location.search);
+    const urlCountry = params.get('country') ?? '';
+    const urlRegion = params.get('region') ?? '';
+    if (urlCountry && countryControls.some((control) => control.dataset.country === urlCountry)) country = urlCountry;
+    else if (urlRegion && regionControls.some((control) => control.dataset.region === urlRegion)) region = urlRegion;
+    render();
+  });
+</script>

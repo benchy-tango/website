@@ -1,19 +1,18 @@
 ---
 /**
- * HOME: hero → Dance & Music (two service panels, the main business) →
- * Visual Art (quieter, three frames) → About → closing contact band.
- * Section order and copy follow navegacion.md and the architecture brief §4.
+ * HOME, a tango site led by the DJ: hero (DJ portrait, booking CTA) →
+ * Music for the dance floor (formats, no photo) → Where I've played (venues, flags) →
+ * Classes (quieter band) → About (with a discreet link to the paintings) →
+ * booking band. Section order and copy follow navegacion.md.
  */
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
-import ArtworkCard from '../../components/ArtworkCard.astro';
 import ContactCTA from '../../components/ContactCTA.astro';
-import { ARTWORKS, EXAMPLE_FRAME_COUNT } from '../../data/artworks';
+import { DJ_HIGHLIGHTS } from '../../data/dj';
 import { enquiryUrl, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
-import dancingPhoto from '../../assets/photos/aaron-dancing.jpg';
-import teachingPhoto from '../../assets/photos/aaron-teaching.jpg';
 import djPhoto from '../../assets/photos/aaron-dj.jpg';
+import classPhoto from '../../assets/photos/aaron-class.jpg';
 import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
 
 export const getStaticPaths = languageStaticPaths;
@@ -21,91 +20,98 @@ export const getStaticPaths = languageStaticPaths;
 const { language } = Astro.props as { language: Language };
 const t = getTranslation(language);
 const h = t.home;
-
-const homeArtworks = ARTWORKS.slice(0, EXAMPLE_FRAME_COUNT.home);
-const exampleShapes = ['portrait', 'landscape', 'square'] as const;
+const cityText = (city: string | Record<Language, string>) => (typeof city === 'string' ? city : city[language]);
 ---
 
 <BaseLayout language={language} page="home" title={h.title} description={h.description} headerOverlay>
-  <!-- HERO: the dance itself, full-bleed; name set large at the lower left -->
+  <!-- HERO: the DJ portrait; on wide screens it fills the right side and
+       fades into the obsidian room, the name sits on the left -->
   <section class="hero">
     <Image
-      src={dancingPhoto}
+      src={djPhoto}
       alt={h.hero.photoAlt}
       class="hero__photo"
-      widths={[828, 1280, 1920, 2048]}
-      sizes="100vw"
+      widths={[640, 960, 1280, 1597]}
+      sizes="(min-width: 960px) 58vw, 100vw"
       loading="eager"
       fetchpriority="high"
     />
     <div class="hero__shade" aria-hidden="true"></div>
     <div class="container hero__content">
-      <h1 class="hero__name">Aaron Benchimol</h1>
+      <h1 class="hero__name" translate="no">{t.meta.siteName}</h1>
       <span class="hero__line" aria-hidden="true"></span>
-      <p class="label hero__subtitle">{h.hero.subtitle}</p>
+      <p class="label hero__subtitle">{h.hero.label}</p>
       <p class="hero__text">{h.hero.text}</p>
       <div class="button-row hero__actions">
-        <Button href={pageUrl(language, 'danceMusic')} arrow>{h.hero.primaryCta}</Button>
-        <Button href={pageUrl(language, 'art')} variant="secondary">{h.hero.secondaryCta}</Button>
+        <Button href={enquiryUrl(language, 'dj')} arrow>{t.common.bookDj}</Button>
+        <Button href={pageUrl(language, 'dj')} variant="secondary">{h.hero.secondaryCta}</Button>
       </div>
     </div>
   </section>
 
-  <!-- DANCE & MUSIC: the main commercial area, two editorial service panels -->
-  <section class="section" aria-labelledby="dance-title">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <h2 id="dance-title">{h.dance.title}</h2>
-        <p class="lead">{h.dance.text}</p>
+  <!-- MUSIC FOR THE DANCE FLOOR: the DJ offer and its formats, set as type
+       (the hero already carries the photograph) -->
+  <section class="section music" aria-labelledby="music-title">
+    <div class="container music__grid">
+      <div class="music__intro" data-reveal>
+        <h2 id="music-title">{h.music.title}</h2>
+        <p class="lead">{h.music.text}</p>
       </div>
-
-      <div class="services">
-        <article class="service service--classes">
-          <div class="service__photo" data-reveal-image>
-            <Image src={teachingPhoto} alt={h.dance.classes.photoAlt} widths={[640, 960, 1400]} sizes="(min-width: 960px) 58vw, 100vw" loading="lazy" />
-          </div>
-          <div class="service__body" data-reveal>
-            <h3>{h.dance.classes.title}</h3>
-            <p class="text">{h.dance.classes.text}</p>
-            <Button href={enquiryUrl(language, 'classes')} arrow>{h.dance.classes.cta}</Button>
-          </div>
-        </article>
-
-        <article class="service service--dj">
-          <div class="service__photo" data-reveal-image style="--reveal-delay:120ms">
-            <Image src={djPhoto} alt={h.dance.dj.photoAlt} widths={[480, 800, 1100]} sizes="(min-width: 960px) 38vw, 100vw" loading="lazy" />
-          </div>
-          <div class="service__body" data-reveal>
-            <h3>{h.dance.dj.title}</h3>
-            <p class="text">{h.dance.dj.text}</p>
-            <Button href={enquiryUrl(language, 'dj')} arrow>{h.dance.dj.cta}</Button>
-          </div>
-        </article>
+      <div class="music__body" data-reveal style="--reveal-delay:120ms">
+        <ol class="music__formats">
+          {
+            t.dj.formats.items.map((format) => (
+              <li>
+                <h3>{format.title}</h3>
+                <p class="text">{format.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <Button href={enquiryUrl(language, 'dj')} arrow>{t.common.bookDj}</Button>
       </div>
     </div>
   </section>
 
-  <!-- VISUAL ART: quieter than Dance & Music; three works (or labelled example frames) -->
-  <section class="section art-teaser" aria-labelledby="art-title">
-    <div class="container">
-      <div class="art-teaser__head" data-reveal>
-        <div class="section-head">
-          <h2 id="art-title">{h.art.title}</h2>
-          <p class="lead">{h.art.text}</p>
-        </div>
-        <a href={pageUrl(language, 'art')} class="text-link">{h.art.cta}</a>
+  <!-- WHERE I'VE PLAYED: real venues from tango-dj.md, set like a programme -->
+  <section class="section played" aria-labelledby="played-title">
+    <div class="container played__grid">
+      <div class="played__head" data-reveal>
+        <h2 id="played-title">{h.played.title}</h2>
+        <a href={pageUrl(language, 'dj', '#experience-dj')} class="text-link">{h.played.cta}</a>
       </div>
-      <div class="art-teaser__grid">
+      <ul class="played__list" data-reveal>
         {
-          homeArtworks.length
-            ? homeArtworks.map((artwork, index) => <ArtworkCard language={language} artwork={artwork} revealDelay={index * 80} />)
-            : exampleShapes.map((shape, index) => <ArtworkCard language={language} shape={shape} revealDelay={index * 80} />)
+          DJ_HIGHLIGHTS.map((highlight) => (
+            <li>
+              <span class="played__venue" translate="no">{highlight.venue}</span>
+              <span class="played__city">
+                <img src={`/flags/${highlight.country}.webp`} width="20" height="15" alt="" loading="lazy" decoding="async" />
+                {cityText(highlight.city)}
+              </span>
+            </li>
+          ))
         }
+      </ul>
+    </div>
+  </section>
+
+  <!-- CLASSES: second business line, a quieter band -->
+  <section class="section classes" aria-labelledby="classes-title">
+    <div class="container classes__grid">
+      <div class="classes__body" data-reveal>
+        <h2 id="classes-title">{h.classes.title}</h2>
+        <p class="lead">{h.classes.text}</p>
+        <Button href={enquiryUrl(language, 'classes')} variant="secondary" arrow>{h.classes.cta}</Button>
+      </div>
+      <div class="classes__photo" data-reveal-image>
+        <!-- The source photo is 496px wide: never shown larger than that -->
+        <Image src={classPhoto} alt={h.classes.photoAlt} widths={[496]} sizes="(min-width: 600px) 496px, 100vw" loading="lazy" />
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ABOUT: from Buenos Aires to Berlin; the paintings only as a quiet link -->
   <section class="section" aria-labelledby="about-title">
     <div class="container about-teaser">
       <div class="about-teaser__photo" data-reveal-image>
@@ -115,11 +121,12 @@ const exampleShapes = ['portrait', 'landscape', 'square'] as const;
         <h2 id="about-title">{h.about.title}</h2>
         <p class="lead">{h.about.text}</p>
         <Button href={pageUrl(language, 'about')} variant="secondary">{h.about.cta}</Button>
+        <a href={pageUrl(language, 'art')} class="about-teaser__art">{h.about.artLink}</a>
       </div>
     </div>
   </section>
 
-  <ContactCTA title={h.final.title} text={h.final.text} cta={h.final.cta} href={pageUrl(language, 'contact')} />
+  <ContactCTA title={h.final.title} text={h.final.text} cta={t.common.bookDj} href={enquiryUrl(language, 'dj')} />
 </BaseLayout>
 
 <style>
@@ -131,6 +138,7 @@ const exampleShapes = ['portrait', 'landscape', 'square'] as const;
     min-height: max(100svh, 40rem);
     overflow: hidden;
     isolation: isolate;
+    background: var(--color-bg);
   }
 
   .hero :global(.hero__photo) {
@@ -140,16 +148,41 @@ const exampleShapes = ['portrait', 'landscape', 'square'] as const;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 62% 30%;
+    object-position: 58% 28%;
   }
 
-  /* Low-key grading: dark from the left and from below so the type reads,
-     the couple stays lit (brand §4: overlays only where text needs them). */
+  /* Phones and tablets: the portrait fills the screen, darkened from below
+     so the name and text read (diseno.md §5: grading only where type sits). */
   .hero__shade {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--shade-hero-side), var(--shade-hero-bottom);
+    background: var(--shade-hero-tall);
+  }
+
+  /* Wide screens: the portrait becomes a tall pane on the right that fades
+     into the obsidian room; the dark studio backdrop makes the seam vanish. */
+  @media (min-width: 960px) {
+    .hero :global(.hero__photo) {
+      left: auto;
+      width: 58%;
+      object-position: 50% 30%;
+    }
+
+    .hero__shade {
+      background: var(--shade-hero-pane), var(--shade-hero-bottom);
+    }
+  }
+
+  /* Small laptops: a narrower pane so the name never runs into the shoulder */
+  @media (min-width: 960px) and (max-width: 1199px) {
+    .hero :global(.hero__photo) {
+      width: 50%;
+    }
+
+    .hero__shade {
+      background: var(--shade-hero-pane-narrow), var(--shade-hero-bottom);
+    }
   }
 
   .hero__content {
@@ -233,110 +266,149 @@ const exampleShapes = ['portrait', 'landscape', 'square'] as const;
     }
   }
 
-  /* ---------- Section heads ---------- */
-  .section-head {
+  /* ---------- Music for the dance floor ---------- */
+  .music__grid {
     display: grid;
-    gap: var(--space-2);
-    max-width: 40rem;
+    gap: var(--space-4);
+    align-items: center;
   }
 
-  /* ---------- Dance & Music services ---------- */
-  .services {
+  .music__intro {
     display: grid;
-    gap: var(--space-6);
-    margin-top: var(--space-6);
-  }
-
-  .service {
-    display: grid;
-    gap: var(--space-3);
     align-content: start;
+    gap: var(--space-3);
   }
 
-  .service__photo {
-    overflow: hidden;
+  .music__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  /* The three formats, set like a programme between fine rules */
+  .music__formats {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .music__formats li {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  @media (min-width: 960px) {
+    .music__grid {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+  }
+
+  /* ---------- Where I've played ---------- */
+  .played {
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .played__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .played__head {
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .played__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .played__list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem var(--space-3);
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .played__venue {
+    font-family: var(--font-display);
+    font-size: var(--text-card);
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+
+  .played__city img {
+    width: 20px;
+    height: 15px;
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .played__city {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 960px) {
+    .played__grid {
+      grid-template-columns: 4fr 7fr;
+      gap: var(--space-7);
+    }
+  }
+
+  /* ---------- Classes (quieter band) ---------- */
+  .classes {
     background: var(--color-surface);
   }
 
-  .service__photo :global(img) {
+  .classes__grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .classes__body {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  .classes__photo {
+    overflow: hidden;
+    width: 100%;
+    max-width: 31rem; /* the photo's own width: no upscaling */
+    aspect-ratio: 496 / 231;
+    justify-self: end;
+  }
+
+  .classes__photo :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .service--classes .service__photo {
-    aspect-ratio: 4 / 3;
-  }
-
-  .service--classes .service__photo :global(img) {
-    object-position: 50% 40%;
-  }
-
-  .service--dj .service__photo {
-    aspect-ratio: 4 / 5;
-  }
-
-  .service--dj .service__photo :global(img) {
-    object-position: 50% 20%;
-  }
-
-  .service__body {
-    display: grid;
-    justify-items: start;
-    gap: var(--space-2);
-  }
-
-  .service__body :global(.button) {
-    margin-top: var(--space-1);
-  }
-
   @media (min-width: 960px) {
-    .services {
-      grid-template-columns: 7fr 5fr;
-      gap: var(--space-5);
-      align-items: start;
-    }
-
-    /* Offset the DJ panel: two panels in conversation, not a card row */
-    .service--dj {
-      margin-top: var(--space-8);
-    }
-  }
-
-  /* ---------- Art teaser ---------- */
-  .art-teaser {
-    background: var(--color-surface);
-  }
-
-  .art-teaser__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-3);
-  }
-
-  /* Phones: two works side by side (the third waits on the Art page) */
-  .art-teaser__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: end;
-    gap: var(--space-2);
-    margin-top: var(--space-5);
-  }
-
-  .art-teaser__grid > :global(:nth-child(3)) {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
-    .art-teaser__grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-4);
-    }
-
-    .art-teaser__grid > :global(:nth-child(3)) {
-      display: block;
+    .classes__grid {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-7);
     }
   }
 
@@ -364,6 +436,27 @@ const exampleShapes = ['portrait', 'landscape', 'square'] as const;
     display: grid;
     justify-items: start;
     gap: var(--space-3);
+  }
+
+  /* The paintings, mentioned quietly: a muted text link, not a CTA */
+  .about-teaser__art {
+    display: inline-block;
+    padding-block: 0.6rem;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .about-teaser__art {
+      transition: color var(--dur-micro) ease, text-decoration-color var(--dur-micro) ease;
+    }
+
+    .about-teaser__art:hover {
+      color: var(--color-text);
+      text-decoration-color: var(--color-accent);
+    }
   }
 
   @media (min-width: 960px) {

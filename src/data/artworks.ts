@@ -1,6 +1,6 @@
 /**
- * Paintings shown in the Visual Art gallery and on the homepage (the first
- * three). Source images: ../wesite-info/imagenes/arte/ (700×700 shop photos).
+ * Paintings shown in the Visual Art gallery (the homepage no longer shows
+ * them: the site is led by tango). Source images: ../wesite-info/imagenes/arte/ (700×700 shop photos).
  *
  * Titles come from the owner's file names (German titles of the
  * "Energiebild" series); the two small signed works have no title in their
@@ -43,6 +43,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting in fiery orange and red, the colour bursting outward from a deep red centre',
       es: 'Pintura abstracta en naranja y rojo intensos, con el color estallando desde un centro rojo profundo',
+      de: 'Abstraktes Gemälde in kräftigem Orange und Rot, die Farbe bricht aus einem tiefroten Zentrum hervor',
     },
   },
   {
@@ -52,6 +53,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting of flowing orange, red and cream currents around a dark violet heart',
       es: 'Pintura abstracta de corrientes fluidas naranjas, rojas y crema alrededor de un núcleo violeta oscuro',
+      de: 'Abstraktes Gemälde mit fließenden Strömen in Orange, Rot und Creme um einen dunkelvioletten Kern',
     },
   },
   {
@@ -61,6 +63,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting of concentric rings in gold, red and teal spiralling inward like a vortex',
       es: 'Pintura abstracta de anillos concéntricos dorados, rojos y turquesa que giran hacia dentro como un remolino',
+      de: 'Abstraktes Gemälde mit konzentrischen Ringen in Gold, Rot und Türkis, die sich wie ein Strudel nach innen drehen',
     },
   },
   {
@@ -70,6 +73,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting with rivers of yellow, green, violet and coral breaking through a dark core',
       es: 'Pintura abstracta con ríos de amarillo, verde, violeta y coral que atraviesan un centro oscuro',
+      de: 'Abstraktes Gemälde mit Strömen in Gelb, Grün, Violett und Koralle, die ein dunkles Zentrum durchbrechen',
     },
   },
   {
@@ -79,6 +83,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting of a golden yellow island shape floating in deep blue',
       es: 'Pintura abstracta de una forma de isla amarillo dorado flotando sobre un azul profundo',
+      de: 'Abstraktes Gemälde einer goldgelben Inselform, die auf tiefem Blau schwebt',
     },
   },
   {
@@ -88,6 +93,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Abstract painting of bright pink, yellow, blue and green colour fields marbling into each other',
       es: 'Pintura abstracta de campos de color rosa, amarillo, azul y verde intensos que se funden como mármol',
+      de: 'Abstraktes Gemälde mit kräftigen Farbfeldern in Rosa, Gelb, Blau und Grün, die wie Marmor ineinanderfließen',
     },
   },
   {
@@ -97,6 +103,7 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Small abstract painting of a turquoise and blue sphere swirling on a green ground',
       es: 'Pequeña pintura abstracta de una esfera turquesa y azul girando sobre un fondo verde',
+      de: 'Kleines abstraktes Gemälde einer türkis-blauen Kugel, die sich auf grünem Grund dreht',
     },
   },
   {
@@ -106,9 +113,10 @@ export const ARTWORKS: Artwork[] = [
     alt: {
       en: 'Small abstract painting of a white star bursting across black, blue, green and burgundy',
       es: 'Pequeña pintura abstracta de una estrella blanca que estalla sobre negro, azul, verde y burdeos',
+      de: 'Kleines abstraktes Gemälde eines weißen Sterns, der auf Schwarz, Blau, Grün und Bordeaux explodiert',
     },
   },
 ];
 
 /** How many example frames to show while ARTWORKS is empty. */
-export const EXAMPLE_FRAME_COUNT = { home: 3, gallery: 6 } as const;
+export const EXAMPLE_FRAME_COUNT = { gallery: 6 } as const;

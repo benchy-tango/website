@@ -1,12 +1,14 @@
 ---
 /**
- * ABOUT: portrait + story ("Meet Aaron Benchimol") → artistic philosophy
- * set large as an editorial statement. CTAs lead to Contact and to
- * Dance & Music (architecture §4: About points back to the business).
+ * ABOUT: portrait + story ("Meet Aaron Benchimol") → on stage (map of shows
+ * and tours) → artistic philosophy
+ * set large as an editorial statement. CTAs lead to Contact and to the
+ * Tango DJ page (the main business); the paintings only as a quiet link.
  */
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
+import ExperienceMap from '../../components/ExperienceMap.astro';
 import { getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
 import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
 
@@ -31,11 +33,15 @@ const a = t.about;
     </div>
   </section>
 
+  <!-- ON STAGE: shows, tours and performances (map + country filter) -->
+  <ExperienceMap language={language} tag="stage" title={t.stage.title} text={t.stage.text} />
+
   <section class="section philosophy" aria-labelledby="philosophy-title">
     <div class="container container--narrow philosophy__inner" data-reveal>
       <h2 id="philosophy-title">{a.philosophy.title}</h2>
       <blockquote class="philosophy__statement"><p>{a.philosophy.text}</p></blockquote>
-      <Button href={pageUrl(language, 'danceMusic')} variant="secondary">{a.philosophy.cta}</Button>
+      <Button href={pageUrl(language, 'dj')} variant="secondary">{a.philosophy.cta}</Button>
+      <a href={pageUrl(language, 'art')} class="philosophy__art">{a.philosophy.artLink}</a>
     </div>
   </section>
 </BaseLayout>
@@ -101,5 +107,19 @@ const a = t.about;
 
   .philosophy__statement p {
     text-wrap: balance;
+  }
+
+  .philosophy__art {
+    padding-block: 0.6rem;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    text-decoration-color: var(--color-border);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .philosophy__art:hover {
+      color: var(--color-text);
+      text-decoration-color: var(--color-accent);
+    }
   }
 </style>

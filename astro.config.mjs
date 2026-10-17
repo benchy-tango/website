@@ -7,7 +7,7 @@ export default defineConfig({
   // hreflang and Open Graph URLs, sitemap.xml and robots.txt Sitemap line).
   // site: 'https://www.aaronbenchimol.com',
 
-  // Brand typefaces (brand-benchy.md §3), downloaded at build time and served
+  // Brand typefaces (diseno.md §2), downloaded at build time and served
   // from this site, so visitors' browsers never contact Google Fonts.
   fonts: [
     {

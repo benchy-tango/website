@@ -1,19 +1,20 @@
 /**
- * Spanish texts. Wording from ../wesite-info/navegacion.md (accents restored);
- * texts that only exist in the English brief are translated here.
+ * Spanish texts. Wording from ../wesite-info/navegacion.md; DJ facts from
+ * ../wesite-info/tango-dj.md. Same shape as en.ts.
  */
 import type english from './en';
 
 const spanish: typeof english = {
   meta: {
-    siteName: 'Aaron Benchimol',
-    descriptor: 'Bailarín de tango argentino · Profesor · DJ · Artista',
+    siteName: 'Benchy Tango',
+    descriptor: 'Tango DJ · Bailarín y profesor de tango argentino',
   },
   navigation: {
     home: 'Inicio',
-    danceMusic: 'Baile y Música',
-    art: 'Arte Visual',
+    dj: 'Tango DJ',
+    classes: 'Clases',
     about: 'Sobre mí',
+    art: 'Arte',
     contact: 'Contacto',
     mainLabel: 'Principal',
     openMenu: 'Abrir el menú',
@@ -29,75 +30,139 @@ const spanish: typeof english = {
     instagramArt: 'Instagram: arte visual',
     whatsapp: 'WhatsApp',
     email: 'Email',
+    bookDj: 'Contratar a Aaron como DJ',
+  },
+  experience: {
+    world: 'Mundo',
+    europe: 'Europa en detalle',
+    regions: { europe: 'Europa', americas: 'América', asia: 'Asia y Oceanía' },
+    filter: 'Filtrar por país',
+    filterRegion: 'Filtrar por continente',
+    all: 'Todos los países',
+    summary: '{countries} países · {entries} experiencias',
+    showing: 'Mostrando {n} experiencias',
+    entry: 'experiencia',
+    entries: 'experiencias',
+    showAll: 'Ver todas',
+    showFewer: 'Ver menos',
+    online: 'Online',
+    roles: {
+      dj: 'Tango DJ',
+      djTraditional: 'Tango DJ (tradicional)',
+      djOrganiser: 'Tango DJ y organizador',
+      djArtist: 'Tango DJ y artista',
+      djTeacher: 'Tango DJ y profesor',
+      teacherDj: 'Profesor de tango y DJ',
+      djDancer: 'Tango DJ y bailarín',
+      show: 'Show de tango',
+      showRockAndRoll: 'Show de tango y rock & roll',
+      showDancer: 'Show de tango y bailarín',
+      teacherRockShow: 'Profesor y show de rock & roll',
+      partner: 'Pareja de baile',
+      tourArtist: 'Gira de tango, artista',
+      artistTeacher: 'Artista y profesor de tango',
+    },
   },
   home: {
-    title: 'Tango argentino, DJ y Arte Visual',
+    title: 'DJ de tango de Buenos Aires, afincado en Berlín',
     description:
-      'Aaron Benchimol: bailarín, profesor y DJ de tango argentino, y pintor. Clases y talleres de tango, DJ para milongas, festivales y eventos privados, y pintura abstracta.',
+      'Aaron Benchimol, DJ de tango argentino de Buenos Aires afincado en Berlín: milongas tradicionales, noches 50/50, festivales y maratones. También clases y talleres de tango.',
     hero: {
-      subtitle: 'Tango, DJ y Arte Visual',
-      text: 'Bienvenido a mi espacio de tango, música y pintura. Descubre mis clases, mis sesiones de DJ y mis obras de arte.',
-      primaryCta: 'Ver Clases y DJ',
-      secondaryCta: 'Ver Pinturas',
-      photoAlt: 'Aaron Benchimol bailando tango argentino en un abrazo cerrado en una milonga',
+      label: 'Aaron Benchimol · Tango DJ · Bailarín · Profesor',
+      text: 'DJ de tango nacido en Buenos Aires y afincado en Berlín. Música para el abrazo: tandas de la Época de Oro, noches 50/50 y maratones de festival.',
+      secondaryCta: 'Ver Perfil de DJ',
+      photoAlt: 'Aaron Benchimol de esmoquin, sonriendo mientras escucha con sus auriculares de DJ',
     },
-    dance: {
-      title: 'Baile y Música',
-      text: 'El tango es conexión y movimiento. Ofrezco clases de tango y música para eventos como DJ.',
-      classes: {
-        title: 'Clases y Talleres de Tango',
-        text: 'Aprende a bailar tango de forma fácil y clara: clases privadas, clases grupales y talleres especiales para todos los niveles.',
-        cta: 'Solicitar Información de Clases',
-        photoAlt: 'Aaron Benchimol sonriendo durante una clase grupal de tango, con parejas practicando detrás',
-      },
-      dj: {
-        title: 'Tango DJ',
-        text: 'Selección musical única para milongas, festivales y eventos privados. Creo el ambiente perfecto para que todos bailen.',
-        cta: 'Contratar DJ para Evento',
-        photoAlt: 'Aaron Benchimol de esmoquin, escuchando con sus auriculares de DJ',
-      },
+    music: {
+      title: 'Música para la pista',
+      text: 'Pincho como bailo. Aprendí en las pistas de Buenos Aires, así que cada tanda está pensada para el abrazo, la energía del salón y el fluir de las parejas.',
     },
-    art: {
-      title: 'Mi Arte',
-      text: 'La pintura es otra forma de expresar emoción y movimiento. Explora mis últimas obras abstractas.',
-      cta: 'Ver Galería de Arte',
+    played: {
+      title: 'Dónde he pinchado',
+      cta: 'Ver Todos los Países',
+    },
+    classes: {
+      title: 'Clases y Talleres de Tango',
+      text: 'Aprende a bailar tango de forma fácil y clara: clases privadas, clases grupales y talleres especiales para todos los niveles.',
+      cta: 'Solicitar Información de Clases',
+      photoAlt: 'Una clase grupal de tango con Aaron Benchimol: alumnos practicando los pasos en un salón de baile',
     },
     about: {
-      title: 'Sobre Mí',
-      text: 'Conoce mi trayectoria como bailarín, DJ y artista visual. Mi vida está dedicada al arte.',
+      title: 'De Buenos Aires a Berlín',
+      text: 'Crecí bailando en las milongas de Buenos Aires y hoy vivo en Berlín. El tango es mi vida: lo bailo, lo enseño y lo pongo en la cabina.',
       cta: 'Leer Mi Historia',
+      artLink: 'También pinto · Ver mis pinturas',
       photoAlt: 'Retrato de Aaron Benchimol apoyado en una columna de piedra',
     },
     final: {
-      title: '¿Trabajamos juntos?',
-      text: 'Si buscas clases de tango, un DJ para tu evento o comprar arte, escríbeme hoy.',
-      cta: 'Contactar Ahora',
+      title: 'Lleva la música a tu milonga',
+      text: '¿Organizas una milonga, un festival, un maratón o un evento privado? Cuéntame la fecha y el lugar.',
     },
   },
-  danceMusic: {
-    title: 'Baile y Música',
+  dj: {
+    title: 'Tango DJ',
     description:
-      'Clases de tango, clases privadas y talleres para todos los niveles, y DJ de tango para milongas, festivales y eventos privados, con Aaron Benchimol.',
-    intro: 'El tango es conexión y movimiento. Ofrezco clases de tango y música para eventos como DJ.',
-    classes: {
-      title: 'Clases de Tango',
+      'Contrata a Aaron Benchimol, DJ de tango de Buenos Aires afincado en Berlín: milongas tradicionales, eventos neo y 50/50, maratones y festivales. Formatos, repertorio y trayectoria.',
+    intro:
+      'DJ de tango (TDJ) de Buenos Aires, afincado en Berlín. Pongo música en milongas, festivales, maratones y eventos privados, en Berlín y como invitado internacional.',
+    origin: {
+      title: 'De la pista a la cabina',
+      text: 'Mi trabajo como DJ nace de mi vida como bailarín en las pistas de Buenos Aires. Priorizo la energía fluida del salón, un ritmo natural entre tandas y el equilibrio en el abrazo social.',
+      approachLabel: 'Cómo pincho',
+      approach: ['Leo la pista en tiempo real', 'Transiciones fluidas entre estilos', 'Sonido ajustado a la acústica de cada sala'],
+      photoAlt: 'Aaron Benchimol de esmoquin, sonriendo mientras escucha con sus auriculares de DJ',
+    },
+    formats: {
+      title: 'Formatos',
+      items: [
+        {
+          title: 'Milongas tradicionales',
+          text: 'Tandas de 4 tangos, 3 valses y 3 milongas con orquestas de los años 30 a los 50, separadas por cortinas.',
+        },
+        {
+          title: 'Eventos neo y 50/50',
+          text: "Orquestas clásicas alternadas con orquestas contemporáneas (Misteriosa Buenos Aires, La Juan D’Arienzo) y neotango o electrotango, con cortinas elegidas con cuidado: rock, indie, funk, cumbia.",
+        },
+        {
+          title: 'Maratones y festivales',
+          text: 'Sets largos de 3 a 5 horas, gestionando la energía de la pista durante toda la noche.',
+        },
+      ],
+    },
+    repertoire: {
+      title: 'La Época de Oro',
+      text: 'En las milongas tradicionales construyo las tandas alrededor de las grandes orquestas de los años 30 y 40.',
+    },
+    experience: {
+      title: 'Dónde he pinchado',
+      text: 'Milongas, festivales y maratones, de Buenos Aires a Berlín. Elige un país o un continente para ver dónde pinché.',
+    },
+    final: {
+      title: 'Contrata a Aaron para tu evento',
+      text: 'Dime el tipo de evento, la fecha y el lugar, y te respondo con mi disponibilidad.',
+    },
+  },
+  classes: {
+    title: 'Clases de Tango',
+    description:
+      'Clases de tango argentino con Aaron Benchimol: clases privadas, clases grupales y talleres especiales para todos los niveles.',
+    intro: 'El tango es conexión y movimiento. Enseño como bailo y como pincho: para el abrazo y la música.',
+    heroPhotoAlt: 'Retrato de Aaron Benchimol de esmoquin y pajarita, ajustándose la chaqueta',
+    offer: {
+      title: 'Aprende a bailar tango',
       text: 'Aprende a bailar tango de forma fácil y clara. Doy clases privadas, clases grupales y talleres especiales para todos los niveles.',
       cta: 'Solicitar Información de Clases',
       formats: ['Clases privadas', 'Clases grupales', 'Talleres especiales'],
-      photoAlt: 'Aaron Benchimol sonriendo durante una clase grupal de tango, con parejas practicando detrás',
+      photoAlt: 'Una clase grupal de tango con Aaron Benchimol: alumnos practicando los pasos en un salón de baile',
     },
-    dj: {
-      title: 'Servicio de DJ',
-      text: 'Selección musical única para milongas, festivales y eventos privados. Creo el ambiente perfecto para que todos bailen.',
-      cta: 'Contratar DJ para Evento',
-      events: ['Milongas', 'Festivales', 'Eventos privados'],
-      photoAlt: 'Aaron Benchimol de esmoquin, escuchando con sus auriculares de DJ',
+    experience: {
+      title: 'Dónde he enseñado',
+      text: 'Clases, talleres y giras como profesor de tango. Elige un país o un continente para filtrar.',
     },
-    floor: {
-      title: 'Momentos en la Pista',
-      text: 'Mira cómo vivimos la música y el baile en cada evento.',
-      cta: 'Reservar Tu Lugar',
-      photoAlt: 'Aaron Benchimol bailando tango con su pareja en una pista iluminada con velas',
+    final: {
+      title: '¿Bailamos?',
+      text: 'Clase privada, clase grupal o un taller para tu comunidad: escríbeme y encontramos el formato adecuado.',
+      cta: 'Solicitar Información de Clases',
     },
   },
   art: {
@@ -117,29 +182,34 @@ const spanish: typeof english = {
   about: {
     title: 'Conoce a Aaron Benchimol',
     description:
-      'Aaron Benchimol: años dedicados al tango argentino, la música y el arte visual, viajando por el mundo para compartir su pasión.',
-    text: 'Llevo años dedicado al tango, la música y el arte visual. Viajo por el mundo compartiendo mi pasión con personas de todos lados.',
+      'Aaron Benchimol: DJ, bailarín y profesor de tango, nacido en Buenos Aires y afincado en Berlín.',
+    text: 'Nací en Buenos Aires y crecí bailando en sus milongas. Hoy vivo en Berlín, donde pongo música en milongas y festivales y enseño tango. Viajo compartiendo mi pasión con personas de todos lados.',
     cta: 'Hablar con Aaron',
     photoAlt: 'Retrato de Aaron Benchimol apoyado en una columna de piedra',
     philosophy: {
       title: 'Arte y Movimiento',
-      text: 'Creo en el poder del arte para conectar a las personas y transmitir emociones profundas.',
-      cta: 'Ver Proyectos Actuales',
+      text: 'Creo en el poder del arte para conectar a las personas y transmitir emociones profundas. La pintura es mi otra forma de expresar el movimiento.',
+      cta: 'Ver Perfil de DJ',
+      artLink: 'Ver mis pinturas',
     },
+  },
+  stage: {
+    title: 'En el escenario',
+    text: 'Shows, giras y presentaciones como bailarín y artista de tango. Elige un país o un continente para filtrar.',
   },
   contact: {
     title: 'Ponte en Contacto',
     description:
-      'Contacta con Aaron Benchimol para clases de tango, talleres, contratar un DJ para tu evento o sus pinturas.',
-    text: 'Rellena el formulario para pedir información sobre clases, contratar sesiones de DJ o comprar obras de arte. Responderé muy pronto.',
+      'Contacta con Aaron Benchimol para contratar un DJ de tango para tu milonga, festival o evento privado, o para clases y talleres de tango.',
+    text: 'Rellena el formulario para contratarme como DJ, pedir información sobre clases o consultar por una obra. Responderé muy pronto.',
     form: {
       name: 'Nombre',
       email: 'Email',
       enquiry: '¿Sobre qué es tu consulta?',
       enquiryTypes: {
+        dj: 'Contratar DJ (milonga, festival, evento privado)',
         classes: 'Clases de baile / clases privadas',
         workshop: 'Taller',
-        dj: 'Contratar DJ',
         performance: 'Actuación / colaboración',
         art: 'Obra de arte / exposición',
         other: 'Otro',
@@ -158,12 +228,13 @@ const spanish: typeof english = {
       },
       privacy:
         'Tu mensaje se envía a través de Netlify, que se lo reenvía a Aaron por email. Tus datos solo se usan para responderte.',
+      privacyLink: 'Política de privacidad',
     },
     direct: {
       title: 'Otras Formas de Contacto',
       emailLabel: 'Email',
       locationLabel: 'Ubicación',
-      location: 'Disponible para viajes y eventos internacionales.',
+      location: 'Afincado en Berlín. Disponible para viajes y eventos internacionales.',
       socialLabel: 'Redes sociales',
       whatsappCta: 'Escribir por WhatsApp',
     },
@@ -174,6 +245,8 @@ const spanish: typeof english = {
   },
   footer: {
     rights: 'Todos los derechos reservados.',
+    imprint: 'Aviso legal',
+    privacy: 'Privacidad',
     madeBy: 'Web realizada por',
   },
   notFound: {
