@@ -1,7 +1,7 @@
 ---
 /**
- * ABOUT: portrait + story ("Meet Aaron Benchimol") → on stage (map of shows
- * and tours) → artistic philosophy
+ * ABOUT: portrait + story ("Meet Aaron Benchimol") → training → on stage
+ * (map of shows and tours) → artistic philosophy
  * set large as an editorial statement. CTAs lead to Contact and to the
  * Tango DJ page (the main business); the paintings only as a quiet link.
  */
@@ -9,7 +9,8 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import ExperienceMap from '../../components/ExperienceMap.astro';
-import { getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
+import { TANGO_TEACHERS, TRAINING } from '../../data/training';
+import { LANGUAGE_DETAILS, getTranslation, languageStaticPaths, pageUrl, type Language } from '../../i18n/languages';
 import portraitPhoto from '../../assets/photos/aaron-portrait.jpg';
 
 export const getStaticPaths = languageStaticPaths;
@@ -17,6 +18,8 @@ export const getStaticPaths = languageStaticPaths;
 const { language } = Astro.props as { language: Language };
 const t = getTranslation(language);
 const a = t.about;
+const tr = a.training;
+const dateFormat = new Intl.DateTimeFormat(LANGUAGE_DETAILS[language].htmlLang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 
 <BaseLayout language={language} page="about" title={a.title} description={a.description}>
@@ -30,6 +33,47 @@ const a = t.about;
         <p class="lead">{a.text}</p>
         <Button href={pageUrl(language, 'contact')} arrow>{a.cta}</Button>
       </div>
+    </div>
+  </section>
+
+  <!-- TRAINING: programme rows, like the experience lists (src/data/training.ts) -->
+  <section class="section training" aria-labelledby="training-title">
+    <div class="container">
+      <h2 id="training-title" data-reveal>{tr.title}</h2>
+      <ol class="training__list" data-reveal>
+        {
+          TRAINING.map((item) => (
+            <li class="training__row">
+              <p class="training__years">{item.years}</p>
+              <div class="training__main">
+                <p class="training__title">{item.title[language]}</p>
+                {item.institution && <p class="training__detail" translate="no">{item.institution}</p>}
+                {item.graduated && (
+                  <p class="training__detail">
+                    {tr.graduated} <time datetime={item.graduated}>{dateFormat.format(new Date(item.graduated))}</time>
+                  </p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+        <li class="training__row">
+          <p class="training__years" aria-hidden="true"></p>
+          <div class="training__main">
+            <p class="training__title">{tr.continuingTitle}</p>
+            <p class="training__detail">
+              {tr.continuingWith} <span translate="no">{TANGO_TEACHERS.join(', ')}</span> {tr.continuingOthers}
+            </p>
+          </div>
+        </li>
+        <li class="training__row">
+          <p class="training__years" aria-hidden="true"></p>
+          <div class="training__main">
+            <p class="training__title">{tr.complementaryTitle}</p>
+            <p class="training__detail">{tr.complementary}</p>
+          </div>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -81,6 +125,70 @@ const a = t.about;
     .story__grid {
       grid-template-columns: 5fr 6fr;
       gap: var(--space-7);
+    }
+  }
+
+  /* ---------- Training ---------- */
+  .training {
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .training__list {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .training__row {
+    display: grid;
+    gap: 0.25rem var(--space-3);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .training__years {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-accent);
+  }
+
+  .training__years:empty {
+    display: none;
+  }
+
+  .training__main {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .training__title {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .training__detail {
+    max-width: 65ch;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 760px) {
+    .training__row {
+      grid-template-columns: 8rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+
+    /* Keep the empty year column so every row lines up */
+    .training__years:empty {
+      display: block;
+    }
+
+    .training__main {
+      grid-column: 2;
     }
   }
 

@@ -185,6 +185,15 @@ const german: typeof english = {
     text: 'Ich bin in Buenos Aires geboren und in seinen Milongas mit dem Tanzen groß geworden. Heute lebe ich in Berlin, wo ich auf Milongas und Festivals auflege und Tango unterrichte. Ich reise und teile meine Leidenschaft mit Menschen von überall.',
     cta: 'Schreib Aaron',
     photoAlt: 'Porträt von Aaron Benchimol, an eine Steinsäule gelehnt',
+    training: {
+      title: 'Ausbildung',
+      graduated: 'Abschluss am',
+      continuingTitle: 'Fortlaufende Ausbildung in Salon- und Bühnentango',
+      continuingWith: 'Bei',
+      continuingOthers: 'und weiteren Lehrerinnen und Lehrern.',
+      complementaryTitle: 'Ergänzende Ausbildung',
+      complementary: 'Ballett und American Tap, Salsa, argentinische Folklore und Rock.',
+    },
     philosophy: {
       title: 'Kunst und Bewegung',
       text: 'Ich glaube an die Kraft der Kunst, Menschen zu verbinden und tiefe Gefühle zu vermitteln. Die Malerei ist meine andere Art, Bewegung auszudrücken.',

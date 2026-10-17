@@ -187,6 +187,15 @@ const english = {
     text: 'I was born in Buenos Aires and grew up dancing in its milongas. Today I live in Berlin, where I DJ at milongas and festivals and teach tango. I travel sharing my passion with people from everywhere.',
     cta: 'Talk to Aaron',
     photoAlt: 'Portrait of Aaron Benchimol leaning against a stone column',
+    training: {
+      title: 'Training',
+      graduated: 'Graduated',
+      continuingTitle: 'Continuing training in salon and stage tango',
+      continuingWith: 'With',
+      continuingOthers: 'and other teachers.',
+      complementaryTitle: 'Complementary training',
+      complementary: 'Ballet and American tap, salsa, Argentine folklore and rock.',
+    },
     philosophy: {
       title: 'Art and Movement',
       text: 'I believe in the power of art to connect people and to convey deep emotions. Painting is my other way of expressing movement.',

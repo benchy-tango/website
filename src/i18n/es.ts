@@ -186,6 +186,15 @@ const spanish: typeof english = {
     text: 'Nací en Buenos Aires y crecí bailando en sus milongas. Hoy vivo en Berlín, donde pongo música en milongas y festivales y enseño tango. Viajo compartiendo mi pasión con personas de todos lados.',
     cta: 'Hablar con Aaron',
     photoAlt: 'Retrato de Aaron Benchimol apoyado en una columna de piedra',
+    training: {
+      title: 'Formación',
+      graduated: 'Egresado el',
+      continuingTitle: 'Formación continua en Tango Salón y Escenario',
+      continuingWith: 'Con',
+      continuingOthers: 'y otros maestros.',
+      complementaryTitle: 'Formación complementaria',
+      complementary: 'Ballet y American Tap, salsa, folklore argentino y rock.',
+    },
     philosophy: {
       title: 'Arte y Movimiento',
       text: 'Creo en el poder del arte para conectar a las personas y transmitir emociones profundas. La pintura es mi otra forma de expresar el movimiento.',

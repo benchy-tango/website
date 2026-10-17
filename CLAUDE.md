@@ -14,6 +14,7 @@ Documento vivo del proyecto. **Léelo primero en cada sesión** y **actualízalo
 | `../wesite-info/diseno.md` | **Fuente única del sistema visual**: colores, tipografía, botones, layout, fotografía, movimiento (antes `brand-benchy.md`) |
 | `../wesite-info/navegacion.md` | Páginas, orden de secciones y texto base en español |
 | `../wesite-info/tango-dj.md` | Perfil de DJ: estilo, formatos, repertorio (y algunas milongas por año) |
+| `../wesite-info/formacion.md` | Formación de Aaron (sección "Training" de About): fuente de `src/data/training.ts` |
 | `../wesite-info/aaron_benchimol_dj-history.md` | **Experiencia por país** (DJ, profesor, shows): fuente principal de `src/data/experience.ts` |
 | `../wesite-info/architecture-benchy.md` | Arquitectura técnica, reglas de conversión, dependencias (las prioridades se actualizaron el 2026-10-17) |
 | `../wesite-info/imagenes/` | Fotos originales del cliente |
@@ -138,7 +139,7 @@ PageIntro "Tango DJ" + CTA oro → **From the dance floor to the booth** (retrat
 **Hero** con `aaron-professor.jpg` (retrato con esmoquin; Aaron a la izquierda, título y CTA oro sobre el lado oscuro derecho con `--shade-hero-right`; en móvil texto abajo con `--shade-hero-tall`; header transparente) → **Learn to Dance Tango** (foto de clase grupal `aaron-class.jpg` a su tamaño real, formatos, CTA contorno → form `classes`) → **Where I’ve Taught** (`ExperienceMap` con `tag="teacher"`) → banda final "Ready to dance?" → form `classes`.
 
 ### About `/about/`
-Retrato + h1 "Meet Aaron Benchimol" + texto (Buenos Aires → Berlín) + CTA oro "Talk to Aaron" → **On Stage** (`ExperienceMap` con `tag="stage"`: shows, giras, bailarín) → **Art and Movement** (cita) + CTA "Discover the DJ Profile" → `/dj/` + enlace discreto "See my paintings".
+Retrato + h1 "Meet Aaron Benchimol" + texto (Buenos Aires → Berlín) + CTA oro "Talk to Aaron" → **Training** (filas tipo programa: años en oro, título, institución; formación continua con sus maestros y formación complementaria; fecha de egreso con `Intl.DateTimeFormat`) → **On Stage** (`ExperienceMap` con `tag="stage"`: shows, giras, bailarín) → **Art and Movement** (cita) + CTA "Discover the DJ Profile" → `/dj/` + enlace discreto "See my paintings".
 
 ### Visual Art `/art/`
 Sin cambios: PageIntro "Art Collection" + CTA → galería de las 8 obras → **How I Create My Art** + CTA + Instagram `@benchy.art`. Ya no sale en la Home.
@@ -250,6 +251,8 @@ Revisado el 2026-10-17 sobre lo que hace realmente el sitio: **sin cookies, sin 
 Ver **0b** para qué skill decide qué. Herramientas: Impeccable (contexto: `.claude/skills/impeccable/scripts/impeccable context`; detector: `impeccable detect --json src/...`); ui-ux-pro-max sin Python instalado (solo su referencia rápida). Capturas de revisión en `.impeccable/review/` (no se suben a git). Para capturas de página completa con los revelados visibles: Playwright vía `npx -p playwright` con `channel: 'msedge'` y `reducedMotion: 'reduce'`, recorriendo la página antes para que carguen las imágenes `lazy`.
 
 ## 11. Registro de cambios
+
+- **2026-10-17** — Sección **Formación** en About (EN "Training", DE "Ausbildung"): UNTREF, CADEF, Centro Integral de Natación A-1459, formación continua en tango salón y escenario con sus maestros y formación complementaria. Datos en `src/data/training.ts`, fuente `../wesite-info/formacion.md`.
 
 - **2026-10-17** — **Páginas legales**: Impressum (`/impressum/`) y política de privacidad (`/privacy/`) en EN, ES y DE, con enlaces en el pie de todas las páginas y junto al formulario. Sin banner de cookies (no hace falta: el sitio no usa cookies ni rastreo). Datos en `src/data/legal.ts`; **falta la dirección postal de Aaron**. 25 páginas.
 
