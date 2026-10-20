@@ -38,6 +38,8 @@ export const PAGE_SLUGS = {
   contact: 'contact',
   impressum: 'impressum',
   privacy: 'privacy',
+  /** Homepage proposal (2026-10-20): not linked from the menu, noindex */
+  homeB: 'home-b',
 } as const;
 export type PageName = keyof typeof PAGE_SLUGS;
 

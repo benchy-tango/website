@@ -38,6 +38,11 @@
   /* Same melt for the narrower 50% pane used on small laptops (960–1199px) */
   --shade-hero-pane-narrow: linear-gradient(90deg, #0b0b0b 0%, #0b0b0b 52%, rgba(11, 11, 11, 0.6) 62%, rgba(11, 11, 11, 0) 78%);
 
+  /* Homepage proposal: the red-curtain triptych, darkened under the header and
+     melting into obsidian at its foot, where the name sits */
+  --shade-hero-curtain: linear-gradient(180deg, rgba(11, 11, 11, 0.6) 0%, rgba(11, 11, 11, 0) 24%, rgba(11, 11, 11, 0) 52%, rgba(11, 11, 11, 0.75) 80%, #0b0b0b 100%);
+  --shade-hero-curtain-sides: linear-gradient(90deg, #0b0b0b 0%, rgba(11, 11, 11, 0) 9%, rgba(11, 11, 11, 0) 91%, #0b0b0b 100%);
+
   /* Experience map (data colours, derived from the brand palette; diseno.md §1) */
   --color-map-land: rgba(245, 239, 223, 0.1); /* land: ivory at 10% on obsidian */
   --color-map-europe: var(--color-accent); /* Europe: muted gold */
